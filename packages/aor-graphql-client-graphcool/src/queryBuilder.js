@@ -1,6 +1,7 @@
 import { TypeKind } from 'graphql';
 import gql from 'graphql-tag';
 import {
+    CREATE,
     GET_LIST,
     GET_ONE,
     GET_MANY,
@@ -9,7 +10,6 @@ import {
     DELETE,
     QUERY_TYPES,
 } from 'aor-graphql-client/lib/constants';
-import pluralize from 'pluralize';
 
 /**
  * Ensure we get the real type even if the root type is NON_NULL or LIST
@@ -208,6 +208,37 @@ export const buildVariables = introspectionResults => (resource, aorFetchType, p
                 id: params.id,
             };
         case UPDATE: {
+            return Object.keys(params.data).reduce((acc, key) => {
+                if (Array.isArray(params.data[key])) {
+                    const arg = queryType.args.find(a => a.name === `${key}Ids`);
+
+                    if (arg) {
+                        return {
+                            ...acc,
+                            [`${key}Ids`]: params.data[key].map(({ id }) => id),
+                        };
+                    }
+                }
+
+                if (typeof params.data[key] === 'object') {
+                    const arg = queryType.args.find(a => a.name === `${key}Id`);
+
+                    if (arg) {
+                        return {
+                            ...acc,
+                            [`${key}Id`]: params.data[key].id,
+                        };
+                    }
+                }
+
+                return {
+                    ...acc,
+                    [key]: params.data[key],
+                };
+            }, {});
+        }
+
+        case CREATE: {
             return Object.keys(params.data).reduce((acc, key) => {
                 if (Array.isArray(params.data[key])) {
                     const arg = queryType.args.find(a => a.name === `${key}Ids`);
