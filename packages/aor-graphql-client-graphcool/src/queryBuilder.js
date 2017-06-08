@@ -210,12 +210,9 @@ export const buildVariables = introspectionResults => (resource, aorFetchType, p
         case UPDATE: {
             return Object.keys(params.data).reduce((acc, key) => {
                 if (Array.isArray(params.data[key])) {
-                    // FIXME: use queryType.args instead of variable key
-                    const linkedResource = introspectionResults.resources.find(
-                        r => r.type.name.toLowerCase() === pluralize.singular(key).toLowerCase(),
-                    );
+                    const arg = queryType.args.find(a => a.name === `${key}Ids`);
 
-                    if (linkedResource) {
+                    if (arg) {
                         return {
                             ...acc,
                             [`${key}Ids`]: params.data[key].map(({ id }) => id),
@@ -224,12 +221,9 @@ export const buildVariables = introspectionResults => (resource, aorFetchType, p
                 }
 
                 if (typeof params.data[key] === 'object') {
-                    // FIXME: use queryType.args instead of variable key
-                    const linkedResource = introspectionResults.resources.find(
-                        r => r.type.name.toLowerCase() === key.toLowerCase(),
-                    );
+                    const arg = queryType.args.find(a => a.name === `${key}Id`);
 
-                    if (linkedResource) {
+                    if (arg) {
                         return {
                             ...acc,
                             [`${key}Id`]: params.data[key].id,
