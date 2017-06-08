@@ -7,7 +7,10 @@ install: ## Install dependencies
 	@lerna bootstrap
 
 test: ## Launch unit tests
-	@lerna run test
+	./node_modules/.bin/jest --projects packages/aor-graphql-client packages/aor-graphql-client-graphcool packages/aor-graphql-client-simple
+
+watch-test: ## Launch unit tests
+	./node_modules/.bin/jest --watch --projects packages/aor-graphql-client packages/aor-graphql-client-graphcool packages/aor-graphql-client-simple
 
 run:
 	@cd ./packages/admin-on-rest-graphql-demo && yarn start
