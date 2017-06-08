@@ -9,6 +9,7 @@ import {
     DELETE,
     QUERY_TYPES,
 } from 'aor-graphql-client/lib/constants';
+import pluralize from 'pluralize';
 
 /**
  * Ensure we get the real type even if the root type is NON_NULL or LIST
@@ -95,7 +96,6 @@ export const buildApolloArgs = (query, variables) => {
     let args = query.args
         .filter(a => validVariables.includes(a.name))
         .map(arg => {
-            // FIXME: Only handle ids and id for now
             if (arg.name.endsWith('Ids')) {
                 return `$${arg.name}: [ID!]`;
             }
@@ -138,7 +138,7 @@ export const buildQuery = introspectionResults => (resource, aorFetchType, query
     return result;
 };
 
-export const buildVariables = introspectionResults => (resource, aorFetchType, params) => {
+export const buildVariables = introspectionResults => (resource, aorFetchType, params, queryType) => {
     switch (aorFetchType) {
         case GET_LIST: {
             const filter = Object.keys(params.filter).reduce((acc, key) => {
@@ -209,19 +209,32 @@ export const buildVariables = introspectionResults => (resource, aorFetchType, p
             };
         case UPDATE: {
             return Object.keys(params.data).reduce((acc, key) => {
-                // FIXME: Only handle ids and id for now
-                if (Array.isArray(params.data[key]) && params.data[key].length > 0 && params.data[key][0].id) {
-                    return {
-                        ...acc,
-                        [`${key}Ids`]: params.data[key].map(({ id }) => id),
-                    };
+                if (Array.isArray(params.data[key])) {
+                    // FIXME: use queryType.args instead of variable key
+                    const linkedResource = introspectionResults.resources.find(
+                        r => r.type.name.toLowerCase() === pluralize.singular(key).toLowerCase(),
+                    );
+
+                    if (linkedResource) {
+                        return {
+                            ...acc,
+                            [`${key}Ids`]: params.data[key].map(({ id }) => id),
+                        };
+                    }
                 }
 
-                if (typeof params.data[key] === 'object' && params.data[key].id) {
-                    return {
-                        ...acc,
-                        [`${key}Id`]: params.data[key].id,
-                    };
+                if (typeof params.data[key] === 'object') {
+                    // FIXME: use queryType.args instead of variable key
+                    const linkedResource = introspectionResults.resources.find(
+                        r => r.type.name.toLowerCase() === key.toLowerCase(),
+                    );
+
+                    if (linkedResource) {
+                        return {
+                            ...acc,
+                            [`${key}Id`]: params.data[key].id,
+                        };
+                    }
                 }
 
                 return {
