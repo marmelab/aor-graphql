@@ -17,10 +17,10 @@ class AcceptButton extends Component {
         const { record, translate } = this.props;
         return record && record.status === 'pending' ? <FlatButton
             primary
-            label={translate('resources.reviews.action.accept')}
+            label={translate('resources.Review.action.accept')}
             onClick={this.handleApprove}
             icon={<ThumbUp color="#4CAF50" />}
-        /> : <span/>;
+        /> : <span />;
     }
 }
 
@@ -34,7 +34,7 @@ const enhance = compose(
     translate,
     connect(null, {
         reviewApprove: reviewApproveAction,
-    })
+    }),
 );
 
 export default enhance(AcceptButton);

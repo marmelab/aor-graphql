@@ -76,9 +76,9 @@ export const buildArgs = (query, variables) => {
         return '';
     }
 
-    const knownVariables = Object.keys(variables);
+    const validVariables = Object.keys(variables).filter(k => !!variables[k] && variables[k] !== null);
     let args = query.args
-        .filter(a => knownVariables.includes(a.name))
+        .filter(a => validVariables.includes(a.name))
         .map(arg => `${arg.name}: $${arg.name}`)
         .join(', ');
 
@@ -90,10 +90,22 @@ export const buildApolloArgs = (query, variables) => {
         return '';
     }
 
-    const knownVariables = Object.keys(variables);
+    const validVariables = Object.keys(variables).filter(k => !!variables[k] && variables[k] !== null);
+
     let args = query.args
-        .filter(a => knownVariables.includes(a.name))
-        .map(arg => `$${arg.name}: ${getArgType(arg)}`)
+        .filter(a => validVariables.includes(a.name))
+        .map(arg => {
+            // FIXME: Only handle ids and id for now
+            if (arg.name.endsWith('Ids')) {
+                return `$${arg.name}: [ID!]`;
+            }
+
+            if (arg.name.endsWith('Id')) {
+                return `$${arg.name}: ID`;
+            }
+
+            return `$${arg.name}: ${getArgType(arg)}`;
+        })
         .join(', ');
 
     return `(${args})`;
@@ -196,7 +208,27 @@ export const buildVariables = introspectionResults => (resource, aorFetchType, p
                 id: params.id,
             };
         case UPDATE: {
-            return params.data;
+            return Object.keys(params.data).reduce((acc, key) => {
+                // FIXME: Only handle ids and id for now
+                if (Array.isArray(params.data[key]) && params.data[key].length > 0 && params.data[key][0].id) {
+                    return {
+                        ...acc,
+                        [`${key}Ids`]: params.data[key].map(({ id }) => id),
+                    };
+                }
+
+                if (typeof params.data[key] === 'object' && params.data[key].id) {
+                    return {
+                        ...acc,
+                        [`${key}Id`]: params.data[key].id,
+                    };
+                }
+
+                return {
+                    ...acc,
+                    [key]: params.data[key],
+                };
+            }, {});
         }
 
         case DELETE:
@@ -221,7 +253,16 @@ export const sanitizeResource = (introspectionResults, resource) => data => {
 
         // NOTE: We might have to handle linked types which are not resources but will have to be careful about
         // ending with endless circular dependencies
-        return { ...acc, [field.name]: data[field.name] };
+        const linkedResource = introspectionResults.resources.find(r => r.type.name === type.name);
+
+        if (Array.isArray(data[field.name])) {
+            return {
+                ...acc,
+                [field.name]: data[field.name].map(sanitizeResource(introspectionResults, linkedResource)),
+            };
+        }
+
+        return { ...acc, [field.name]: sanitizeResource(introspectionResults, linkedResource)(data[field.name]) };
     }, {});
 
     return result;
