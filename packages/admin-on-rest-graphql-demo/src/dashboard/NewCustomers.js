@@ -17,7 +17,7 @@ export default translate(({ visitors = [], nb, translate }) => (
         <List>
             {visitors.map(record =>
                 <ListItem href={`#/Customer/${record.id}`} key={record.id} leftAvatar={<Avatar src={`${record.avatar}?size=32x32`} />} >
-                    {record.first_name} {record.last_name}
+                    {record.firstName} {record.lastName}
                 </ListItem>,
             )}
         </List>

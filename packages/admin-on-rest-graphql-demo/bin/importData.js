@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
 import 'isomorphic-fetch';
+import add_months from 'date-fns/add_months';
 import apolloClient from '../src/apolloClient';
 import data from './data';
 
@@ -100,9 +101,9 @@ const createCustomer = customer => apolloClient.mutate({
         city: customer.city,
         avatar: customer.avatar,
         birthday: customer.birthday,
-        firstSeen: customer.first_seen,
-        lastSeen: customer.last_seen,
-        latestPurchase: customer.latest_purchase,
+        firstSeen: customer.first_seen ? add_months(customer.first_seen, 1) : customer.first_seen,
+        lastSeen: customer.last_seen ? add_months(customer.last_seen, 1) : customer.last_seen,
+        latestPurchase: customer.latest_purchase ? add_months(customer.latest_purchase, 1) : customer.latest_purchase,
         hasOrdered: customer.has_ordered,
         hasNewsletter: customer.has_newsletter,
         nbCommands: customer.nb_commands,
@@ -141,7 +142,7 @@ const createCommand = command => apolloClient.mutate({
     `,
     variables: {
         reference: command.reference,
-        date: command.date,
+        date: command.date ? add_months(command.date, 1) : command.date,
         totalExTaxes: command.total_ex_taxes,
         deliveryFees: command.delivery_fees,
         taxRate: command.tax_rate,
@@ -184,17 +185,20 @@ const createReview = review => apolloClient.mutate({
             ) { id }
         }
     `,
-    variables: review,
+    variables: {
+        ...review,
+        date: review.date ? add_months(review.date, 1) : review.date,
+    },
 }).then(response => ({ newId: response.data.createReview.id }));
 
-const createGroup = group => apolloClient.mutate({
+const createSegment = group => apolloClient.mutate({
     mutation: gql`
-        mutation createCustomerGroup($name: String!) {
-            createCustomerGroup(name: $name) { id }
+        mutation createSegment($name: String!) {
+            createSegment(name: $name) { id }
         }
     `,
     variables: { name: group },
-}).then(response => ({ id: group, newId: response.data.createCustomerGroup.id }));
+}).then(response => ({ id: group, newId: response.data.createSegment.id }));
 
 const createData = async () => {
     try {
@@ -217,7 +221,7 @@ const createData = async () => {
             return acc;
         }, new Set());
 
-        const groupsById = await Promise.all(Array.from(distinctGroups).map(createGroup));
+        const groupsById = await Promise.all(Array.from(distinctGroups).map(createSegment));
         const customersById = await Promise.all(data.customers.map(({ groups, ...customer }) => {
             const groupsIds = groupsById.filter(g => groups.includes(g.id)).map(g => g.newId);
 

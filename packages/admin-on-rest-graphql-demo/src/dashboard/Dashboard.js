@@ -26,7 +26,7 @@ class Dashboard extends Component {
             .then(restClient => this.setState({ restClient }, () => {
                 const d = new Date();
                 d.setDate(d.getDate() - 30);
-                console.log(d, d.toISOString());
+
                 this.state.restClient(GET_LIST, 'Command', {
                     filter: { date_gte: d.toISOString() },
                     sort: { field: 'date', order: 'DESC' },
@@ -61,7 +61,7 @@ class Dashboard extends Component {
                     .then(pendingOrders => pendingOrders.map(order => order.customer.id))
                     .then(customerIds => restClient(GET_MANY, 'Customer', { ids: customerIds }))
                     .then(response => response.data)
-                    .then(customers => console.log({ customers }) || customers.reduce((prev, customer) => {
+                    .then(customers => customers.reduce((prev, customer) => {
                         prev[customer.id] = customer; // eslint-disable-line no-param-reassign
                         return prev;
                     }, {}))
@@ -79,7 +79,7 @@ class Dashboard extends Component {
                         this.setState({ pendingReviews, nbPendingReviews });
                         return pendingReviews;
                     })
-                    .then(reviews => reviews.map(review => review.customer_id))
+                    .then(reviews => reviews.map(review => review.customer.id))
                     .then(customerIds => restClient(GET_MANY, 'Customer', { ids: customerIds }))
                     .then(response => response.data)
                     .then(customers => customers.reduce((prev, customer) => {
