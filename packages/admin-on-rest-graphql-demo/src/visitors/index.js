@@ -37,7 +37,7 @@ const VisitorFilter = props => (
         <DateInput source="lastSeen_gte" label="Last seen" />
         <NullableBooleanInput source="hasOrdered" label="Has ordered" />
         <NullableBooleanInput source="hasNewsletter" label="Has Newsletter" defaultValue />
-        <ReferenceArrayInput source="groups.id" reference="Segment">
+        <ReferenceArrayInput source="groups.id" reference="Segment" label="resources.Customer.fields.groups">
             <SelectArrayInput optionText="name" />
         </ReferenceArrayInput>
     </Filter>

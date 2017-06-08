@@ -32,7 +32,6 @@ export const includeExclude = ({ include, exclude }) => {
  * @param {Object} options The introspection options
  */
 export default async (client, options) => {
-    // 1. Run the introspection query
     const schema = await client.query({ query: gql`${introspectionQuery}` }).then(({ data: { __schema } }) => __schema);
 
     const queries = schema.types

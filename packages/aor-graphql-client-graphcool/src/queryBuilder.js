@@ -105,20 +105,19 @@ export const buildApolloArgs = (query, variables) => {
 // We should investigate how to build such DocumentNode from introspection results
 // as it would be more robust.
 export const buildQuery = introspectionResults => (resource, aorFetchType, query, variables) => {
-    let fields;
     const queryType = getQueryType(aorFetchType);
     const apolloArgs = buildApolloArgs(query, variables);
     const args = buildArgs(query, variables);
+    const fields = buildFields(introspectionResults)(resource.type.fields);
 
     if (aorFetchType === GET_LIST || aorFetchType === GET_MANY || aorFetchType === GET_MANY_REFERENCE) {
         const result = `${queryType} ${query.name}${apolloArgs} {
-            items: ${query.name}${args} { ${buildFields(introspectionResults)(resource.type.fields)} }
-            total: _${query.name}Meta { count }
+            items: ${query.name}${args} { ${fields} }
+            total: _${query.name}Meta${args} { count }
         }`;
         return result;
     }
 
-    fields = buildFields(introspectionResults)(resource.type.fields);
     const result = `${queryType} ${query.name}${apolloArgs} {
         data: ${query.name}${args} {
             ${fields}
@@ -228,12 +227,12 @@ export const sanitizeResource = (introspectionResults, resource) => data => {
     return result;
 };
 
-export const getResponseParser = introspectionResults => (aorFetchType, resource, query) => response => {
+export const getResponseParser = introspectionResults => (aorFetchType, resource) => response => {
     const sanitize = sanitizeResource(introspectionResults, resource);
     const data = response.data;
 
     if (aorFetchType === GET_LIST || aorFetchType === GET_MANY || aorFetchType === GET_MANY_REFERENCE) {
-        return { data: response.data.items, total: response.data.total.count };
+        return { data: response.data.items.map(sanitize), total: response.data.total.count };
     }
 
     return { data: sanitize(data.data) };
