@@ -130,6 +130,15 @@ export const buildQuery = introspectionResults => (resource, aorFetchType, query
         return result;
     }
 
+    if (aorFetchType === DELETE) {
+        const result = `${queryType} ${query.name}${apolloArgs} {
+            data: ${query.name}${args} {
+                id
+            }
+        }`;
+        return result;
+    }
+
     const result = `${queryType} ${query.name}${apolloArgs} {
         data: ${query.name}${args} {
             ${fields}
