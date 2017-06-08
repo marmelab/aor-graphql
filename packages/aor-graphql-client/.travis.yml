@@ -1,0 +1,21 @@
+language: node_js
+
+node_js:
+    - "7.7.2"
+
+env:
+    global:
+        - NODE_ENV=test
+
+dist: trusty
+
+cache:
+    yarn: true
+    directories:
+        - node_modules
+
+before_install:
+    - npm install -g yarn
+
+install:
+    - "make --silent install"

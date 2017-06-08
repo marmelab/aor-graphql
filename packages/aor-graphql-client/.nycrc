@@ -1,0 +1,9 @@
+{
+    "sourceMap": false,
+    "instrument": false,
+    "reporter": [
+        "cobertura",
+        "lcov",
+        "text"
+    ]
+}

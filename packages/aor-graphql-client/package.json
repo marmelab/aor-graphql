@@ -1,0 +1,61 @@
+{
+  "name": "aor-graphql-client",
+  "version": "0.0.1",
+  "description": "A GraphQL client for admin-on-rest",
+  "main": "./lib/index.js",
+  "repository": "https://github.com/marmelab/aor-graphql-client.git",
+  "authors": [
+    "Gildas Garcia"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "build": "make build",
+    "clean": "make clean",
+    "format": "make format",
+    "precommit": "lint-staged",
+    "prepublish": "make build",
+    "test": "make test",
+    "watch": "make watch",
+    "watch-test": "make watch-test"
+  },
+  "lint-staged": {
+    "gitDir": "../../",
+    "./packages/aor-graphql-client/src/**/*.js": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "devDependencies": {
+    "admin-on-rest": "~1.0.2",
+    "babel-cli": "~6.24.1",
+    "babel-core": "~6.24.1",
+    "babel-eslint": "7.2.3",
+    "babel-jest": "~20.0.3",
+    "babel-plugin-istanbul": "~4.1.3",
+    "babel-preset-es2015": "~6.24.1",
+    "babel-preset-stage-0": "~6.24.1",
+    "eslint": "~3.19.0",
+    "eslint-config-prettier": "~1.7.0",
+    "eslint-plugin-import": "~2.2.0",
+    "eslint-plugin-jest": "~20.0.3",
+    "eslint-plugin-prettier": "~2.0.1",
+    "husky": "~0.13.3",
+    "istanbul-cobertura-badger": "~1.3.0",
+    "jest": "^20.0.4",
+    "lint-staged": "~3.4.1",
+    "nyc": "~10.3.2",
+    "prettier": "~1.3.1"
+  },
+  "dependencies": {
+    "aor-realtime": "~0.0.1",
+    "apollo-client": "~1.2.0",
+    "babel-plugin-transform-runtime": "~6.23.0",
+    "graphql": "~0.9.6",
+    "graphql-tag": "~2.0.0",
+    "lodash.merge": "~4.6.0",
+    "pluralize": "~4.0.0"
+  },
+  "peerDependencies": {
+    "admin-on-rest": "~1.0.2"
+  }
+}

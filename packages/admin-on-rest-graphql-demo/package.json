@@ -1,0 +1,51 @@
+{
+  "name": "admin-on-rest-graphql-demo",
+  "version": "1.0.0",
+  "private": true,
+  "devDependencies": {
+    "babel-eslint": "^7.1.1",
+    "babel-polyfill": "^6.16.0",
+    "eslint": "^3.10.2",
+    "eslint-config-airbnb": "^13.0.0",
+    "eslint-config-airbnb-base": "^10.0.1",
+    "eslint-import-resolver-node": "^0.2.3",
+    "eslint-module-utils": "^2.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.7.1",
+    "fakerest": "^1.2.1",
+    "fetch-mock": "^5.5.0",
+    "gh-pages": "^0.12.0",
+    "react-scripts": "0.9.5"
+  },
+  "dependencies": {
+    "admin-on-rest": "~1.1.0",
+    "aor-language-french": "^1.8.0",
+    "aor-rich-text-input": "^1.0.0",
+    "aor-graphql-client-graphcool": "^0.0.1",
+    "apollo-client": "^1.2.0",
+    "apollo-test-utils": "^0.3.0",
+    "casual-browserify": "^1.5.12",
+    "graphql": "^0.9.6",
+    "graphql-tools": "^0.11.0",
+    "lodash.upperfirst": "^4.3.1",
+    "material-ui": "~0.16.4",
+    "pluralize": "^4.0.0",
+    "prop-types": "~15.5.7",
+    "react": "~15.5.4",
+    "react-dom": "~15.5.4",
+    "react-redux": "~5.0.4",
+    "react-router-dom": "~4.1.0",
+    "react-tap-event-plugin": "~2.0.1",
+    "redux-form": "~6.6.2",
+    "redux-saga": "~0.14.6"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "deploy": "npm run build && now ./build --public --name admin-on-rest-graphql"
+  },
+  "homepage": "http://marmelab.com/admin-on-rest-graphql-demo/"
+}

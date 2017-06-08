@@ -1,0 +1,268 @@
+import { TypeKind } from 'graphql';
+import gql from 'graphql-tag';
+import {
+    GET_LIST,
+    GET_ONE,
+    GET_MANY,
+    GET_MANY_REFERENCE,
+    UPDATE,
+    DELETE,
+    QUERY_TYPES,
+} from 'aor-graphql-client/lib/constants';
+
+/**
+ * Ensure we get the real type even if the root type is NON_NULL or LIST
+ * @param {GraphQLType} type 
+ */
+export const getFinalType = type => {
+    if (type.kind === TypeKind.NON_NULL || type.kind === TypeKind.LIST) {
+        return getFinalType(type.ofType);
+    }
+
+    return type;
+};
+
+/**
+ * Check wether the type is a LIST (or a NON_NULL LIST)
+ * @param {GraphQLType} type 
+ */
+export const isList = type => {
+    if (type.kind === TypeKind.NON_NULL) {
+        return isList(type.ofType);
+    }
+
+    return type.kind === TypeKind.LIST;
+};
+
+export const buildFields = introspectionResults => fields =>
+    fields
+        .reduce((acc, field) => {
+            const type = getFinalType(field.type);
+
+            if (type.kind !== TypeKind.OBJECT) {
+                return [...acc, field.name];
+            }
+
+            const linkedResource = introspectionResults.resources.find(r => r.type.name === type.name);
+
+            if (linkedResource) {
+                return [acc, `${field.name} { id }`];
+            }
+
+            const linkedType = introspectionResults.types.find(t => t.name === type.name);
+
+            if (linkedType) {
+                return [acc, `${field.name} { ${buildFields(introspectionResults)(linkedType.fields)} }`];
+            }
+
+            // NOTE: We might have to handle linked types which are not resources but will have to be careful about
+            // ending with endless circular dependencies
+            return acc;
+        }, [])
+        .join(' ');
+
+export const getQueryType = aorFetchType => (QUERY_TYPES.includes(aorFetchType) ? 'query' : 'mutation');
+
+export const getArgType = arg => {
+    if (arg.type.kind === TypeKind.NON_NULL) {
+        return `${arg.type.ofType.name}!`;
+    }
+
+    return arg.type.name;
+};
+
+export const buildArgs = (query, variables) => {
+    if (query.args.length === 0) {
+        return '';
+    }
+
+    const knownVariables = Object.keys(variables);
+    let args = query.args
+        .filter(a => knownVariables.includes(a.name))
+        .map(arg => `${arg.name}: $${arg.name}`)
+        .join(', ');
+
+    return `(${args})`;
+};
+
+export const buildApolloArgs = (query, variables) => {
+    if (query.args.length === 0) {
+        return '';
+    }
+
+    const knownVariables = Object.keys(variables);
+    let args = query.args
+        .filter(a => knownVariables.includes(a.name))
+        .map(arg => `$${arg.name}: ${getArgType(arg)}`)
+        .join(', ');
+
+    return `(${args})`;
+};
+
+// NOTE: Building queries by merging/concatenating strings is bad and dirty!
+// The ApolloClient.query method accepts an object of the shape { query, variables }.
+// The query is actually a DocumentNode which is builded by the gql tag function.
+// We should investigate how to build such DocumentNode from introspection results
+// as it would be more robust.
+export const buildQuery = introspectionResults => (resource, aorFetchType, query, variables) => {
+    let fields;
+    const queryType = getQueryType(aorFetchType);
+    const apolloArgs = buildApolloArgs(query, variables);
+    const args = buildArgs(query, variables);
+
+    if (aorFetchType === GET_LIST || aorFetchType === GET_MANY || aorFetchType === GET_MANY_REFERENCE) {
+        const result = `${queryType} ${query.name}${apolloArgs} {
+            items: ${query.name}${args} { ${buildFields(introspectionResults)(resource.type.fields)} }
+            total: _${query.name}Meta { count }
+        }`;
+        return result;
+    }
+
+    fields = buildFields(introspectionResults)(resource.type.fields);
+    const result = `${queryType} ${query.name}${apolloArgs} {
+        data: ${query.name}${args} {
+            ${fields}
+        }
+    }`;
+    return result;
+};
+
+export const buildVariables = introspectionResults => (resource, aorFetchType, params) => {
+    switch (aorFetchType) {
+        case GET_LIST: {
+            const filter = Object.keys(params.filter).reduce((acc, key) => {
+                if (key === 'ids') {
+                    return { ...acc, id_in: params.filter[key] };
+                }
+
+                if (typeof params.filter[key] === 'object') {
+                    const type = introspectionResults.types.find(t => t.name === `${resource.type.name}Filter`);
+                    const filterSome = type.inputFields.find(t => t.name === `${key}_some`);
+
+                    if (filterSome) {
+                        const filter = Object.keys(params.filter[key]).reduce(
+                            (acc, k) => ({ ...acc, [`${k}_in`]: params.filter[key][k] }),
+                            {},
+                        );
+                        return { ...acc, [`${key}_some`]: filter };
+                    }
+                }
+
+                const parts = key.split('.');
+
+                if (parts.length > 1) {
+                    if (parts[1] == 'id') {
+                        const type = introspectionResults.types.find(t => t.name === `${resource.type.name}Filter`);
+                        const filterSome = type.inputFields.find(t => t.name === `${parts[0]}_some`);
+
+                        if (filterSome) {
+                            return { ...acc, [`${parts[0]}_some`]: { id: params.filter[key] } };
+                        }
+
+                        return { ...acc, [parts[0]]: { id: params.filter[key] } };
+                    }
+
+                    const resourceField = resource.type.fields.find(f => f.name === parts[0]);
+                    if (resourceField.type.name === 'Int') {
+                        return { ...acc, [key]: parseInt(params.filter[key]) };
+                    }
+                    if (resourceField.type.name === 'Float') {
+                        return { ...acc, [key]: parseFloat(params.filter[key]) };
+                    }
+                }
+
+                return { ...acc, [key]: params.filter[key] };
+            }, {});
+
+            return {
+                skip: parseInt((params.pagination.page - 1) * params.pagination.perPage),
+                last: parseInt(params.pagination.perPage),
+                orderBy: `${params.sort.field}_${params.sort.order}`,
+                filter,
+            };
+        }
+        case GET_MANY:
+            return {
+                filter: { id_in: params.ids },
+            };
+        case GET_MANY_REFERENCE: {
+            const parts = params.target.split('.');
+
+            return {
+                filter: { [parts[0]]: { id: params.id } },
+            };
+        }
+        case GET_ONE:
+            return {
+                id: params.id,
+            };
+        case UPDATE: {
+            return params.data;
+        }
+
+        case DELETE:
+            return {
+                id: params.id,
+            };
+    }
+};
+
+export const sanitizeResource = (introspectionResults, resource) => data => {
+    const result = Object.keys(data).reduce((acc, key) => {
+        if (key.startsWith('_')) {
+            return acc;
+        }
+
+        const field = resource.type.fields.find(f => f.name === key);
+        const type = getFinalType(field.type);
+
+        if (type.kind !== TypeKind.OBJECT) {
+            return { ...acc, [field.name]: data[field.name] };
+        }
+
+        // NOTE: We might have to handle linked types which are not resources but will have to be careful about
+        // ending with endless circular dependencies
+        return { ...acc, [field.name]: data[field.name] };
+    }, {});
+
+    return result;
+};
+
+export const getResponseParser = introspectionResults => (aorFetchType, resource, query) => response => {
+    const sanitize = sanitizeResource(introspectionResults, resource);
+    const data = response.data;
+
+    if (aorFetchType === GET_LIST || aorFetchType === GET_MANY || aorFetchType === GET_MANY_REFERENCE) {
+        return { data: response.data.items, total: response.data.total.count };
+    }
+
+    return { data: sanitize(data.data) };
+};
+
+export default introspectionResults => {
+    const knownResources = introspectionResults.resources.map(r => r.type.name);
+
+    return (aorFetchType, resourceName, params) => {
+        const resource = introspectionResults.resources.find(r => r.type.name === resourceName);
+
+        if (!resource) {
+            throw new Error(
+                `Unknown resource ${resource}. Make sure it has been declared on your server side schema. Known resources are ${knownResources.join(', ')}`,
+            );
+        }
+
+        const queryType = resource[aorFetchType];
+
+        if (!queryType) {
+            throw new Error(
+                `No query or mutation matching aor fetch type ${aorFetchType} could be found for resource ${resource.type.name}`,
+            );
+        }
+
+        const variables = buildVariables(introspectionResults)(resource, aorFetchType, params, queryType);
+        const query = buildQuery(introspectionResults)(resource, aorFetchType, queryType, variables);
+        const parseResponse = getResponseParser(introspectionResults)(aorFetchType, resource, queryType);
+
+        return { query: gql`${query}`, variables, parseResponse };
+    };
+};
