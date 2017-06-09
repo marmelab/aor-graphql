@@ -1,6 +1,5 @@
 import React from 'react';
-import { translate, SingleFieldList } from 'admin-on-rest';
-import ReferenceArrayField from '../admin-on-rest-overrides/ReferenceArrayField';
+import { translate, ReferenceArrayField, SingleFieldList } from 'admin-on-rest';
 
 import Chip from 'material-ui/Chip';
 
@@ -9,15 +8,16 @@ const NameField = translate(({ translate: t, source, record = {} }) => (
 ));
 
 const SegmentReferenceField = props => (
-    <ReferenceArrayField source="groups.id" reference="Segment" {...props}>
+    <ReferenceArrayField source="groupsIds" reference="Segment" {...props}>
         <SingleFieldList>
             <NameField source="name" />
         </SingleFieldList>
     </ReferenceArrayField>
 );
+
 SegmentReferenceField.defaultProps = {
     label: 'resources.Customer.fields.groups',
-    source: 'groups.id',
+    source: 'groupsIds',
     addLabel: true,
 };
 

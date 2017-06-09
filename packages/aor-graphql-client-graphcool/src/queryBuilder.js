@@ -298,18 +298,25 @@ export const sanitizeResource = (introspectionResults, resource) => data => {
             return { ...acc, [field.name]: data[field.name] };
         }
 
-        // NOTE: We might have to handle linked types which are not resources but will have to be careful about
-        // ending with endless circular dependencies
+        // FIXME: We might have to handle linked types which are not resources but will have to be careful about
+        // endless circular dependencies
         const linkedResource = introspectionResults.resources.find(r => r.type.name === type.name);
 
-        if (Array.isArray(data[field.name])) {
+        if (linkedResource) {
+            if (Array.isArray(data[field.name])) {
+                return {
+                    ...acc,
+                    [field.name]: data[field.name].map(sanitizeResource(introspectionResults, linkedResource)),
+                    [`${field.name}Ids`]: data[field.name].map(d => d.id),
+                };
+            }
+
             return {
                 ...acc,
-                [field.name]: data[field.name].map(sanitizeResource(introspectionResults, linkedResource)),
+                [`${field.name}.id`]: data[field.name].id,
+                [field.name]: sanitizeResource(introspectionResults, linkedResource)(data[field.name]),
             };
         }
-
-        return { ...acc, [field.name]: sanitizeResource(introspectionResults, linkedResource)(data[field.name]) };
     }, {});
 
     return result;
