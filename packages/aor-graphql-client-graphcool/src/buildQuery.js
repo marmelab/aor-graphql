@@ -43,7 +43,7 @@ export const getArgType = arg => {
 
 export const buildArgs = (query, variables) => {
     if (query.args.length === 0) {
-        return '';
+        return {};
     }
 
     const validVariables = Object.keys(variables).filter(k => !!variables[k] && variables[k] !== null);
@@ -56,18 +56,18 @@ export const buildArgs = (query, variables) => {
 
 export const buildApolloArgs = (query, variables) => {
     if (query.args.length === 0) {
-        return '';
+        return {};
     }
 
     const validVariables = Object.keys(variables).filter(k => !!variables[k] && variables[k] !== null);
 
     let args = query.args.filter(a => validVariables.includes(a.name)).reduce((acc, arg) => {
         if (arg.name.endsWith('Ids')) {
-            return { ...acc, [`$${arg.name}`]: '[ID!]' };
+            return { ...acc, [`$${arg.name}`]: '[ID!]!' };
         }
 
         if (arg.name.endsWith('Id')) {
-            return { ...acc, [`$${arg.name}`]: 'ID' };
+            return { ...acc, [`$${arg.name}`]: 'ID!' };
         }
 
         return { ...acc, [`$${arg.name}`]: getArgType(arg) };
