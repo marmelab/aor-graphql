@@ -1,7 +1,3 @@
-import { _enum } from './enum';
-export { default as Enum } from './enum';
-export { default as Fragment } from './fragment';
-
 // Encodes a graphql query
 const graphqlify = function(fields) {
     return encodeOperation('', fields);
@@ -49,64 +45,7 @@ function encodeOperation(type, _nameOrFields, _fieldsOrNil) {
         parts.push(`${type}${fieldset}`);
     }
 
-    const fragments = findFragments(fields);
-    if (fragments.length) {
-        parts.push(encodeFragments(fragments));
-    }
-
     return parts.join(',');
-}
-
-// TODO add function description
-function findFragments(fields) {
-    const fragments = Object.keys(fields)
-        .filter(key => fields[key] && typeof fields[key] === 'object')
-        .map(key => findFieldFragments(fields[key]))
-        .reduce((a, b) => a.concat(b), []);
-    return Array.from(new Set(fragments));
-}
-
-// TODO add function description
-function findFieldFragments(field) {
-    let fragments = [];
-    if (field.fragments) {
-        fragments = fragments.concat(field.fragments);
-        field.fragments.forEach(frag => {
-            const fragFragments = findFragFragments(frag);
-            fragments = fragments.concat(fragFragments);
-        });
-    }
-    if (field.fields) {
-        fragments = fragments.concat(findFragments(field.fields));
-    }
-    return fragments;
-}
-
-// TODO add function description
-function findFragFragments(frag) {
-    let fragments = [];
-    if (frag.fragments) {
-        fragments = fragments.concat(frag.fragments);
-        frag.fragments.forEach(nestedFrag => {
-            const fragFragments = findFragFragments(nestedFrag);
-            fragments = fragments.concat(fragFragments);
-        });
-    }
-    if (frag.fields) {
-        fragments = fragments.concat(findFragments(frag.fields));
-    }
-    return fragments;
-}
-
-// TODO add function description
-function encodeFragments(fragments) {
-    return fragments.map(f => encodeFragment(f)).join(',');
-}
-
-// TODO add function description
-function encodeFragment(fragment) {
-    const fieldset = encodeFieldset(fragment.fields, fragment.fragments);
-    return `fragment ${fragment.name} on ${fragment.type}${fieldset}`;
 }
 
 // Encodes a group of fields and fragments
@@ -251,19 +190,10 @@ function encodeParamValue(value) {
     if (Array.isArray(value)) {
         return encodeParamsArray(value);
     }
-    if (value instanceof _enum) {
-        return value.name;
-    }
     if (typeof value === 'object') {
         return encodeParamsObject(value);
     }
     if (typeof value === 'string') {
-        return value;
-    }
-    if (typeof value === 'number') {
-        return String(value);
-    }
-    if (typeof value === 'boolean') {
         return value;
     }
 
