@@ -10,7 +10,7 @@ import {
     DELETE,
     QUERY_TYPES,
 } from 'aor-graphql-client/lib/constants';
-
+import { encodeQuery, encodeMutation } from './graphqlify';
 /**
  * Ensure we get the real type even if the root type is NON_NULL or LIST
  * @param {GraphQLType} type 
@@ -36,33 +36,33 @@ export const isList = type => {
 };
 
 export const buildFields = introspectionResults => fields =>
-    fields
-        .reduce((acc, field) => {
-            const type = getFinalType(field.type);
+    fields.reduce((acc, field) => {
+        const type = getFinalType(field.type);
 
-            if (type.kind !== TypeKind.OBJECT) {
-                return [...acc, field.name];
-            }
-
-            const linkedResource = introspectionResults.resources.find(r => r.type.name === type.name);
-
-            if (linkedResource) {
-                return [acc, `${field.name} { id }`];
-            }
-
-            const linkedType = introspectionResults.types.find(t => t.name === type.name);
-
-            if (linkedType) {
-                return [acc, `${field.name} { ${buildFields(introspectionResults)(linkedType.fields)} }`];
-            }
-
-            // NOTE: We might have to handle linked types which are not resources but will have to be careful about
-            // ending with endless circular dependencies
+        if (type.name.startsWith('_')) {
             return acc;
-        }, [])
-        .join(' ');
+        }
 
-export const getQueryType = aorFetchType => (QUERY_TYPES.includes(aorFetchType) ? 'query' : 'mutation');
+        if (type.kind !== TypeKind.OBJECT) {
+            return { ...acc, [field.name]: {} };
+        }
+
+        const linkedResource = introspectionResults.resources.find(r => r.type.name === type.name);
+
+        if (linkedResource) {
+            return { ...acc, [field.name]: { fields: { id: {} } } };
+        }
+
+        const linkedType = introspectionResults.types.find(t => t.name === type.name);
+
+        if (linkedType) {
+            return { ...acc, [field.name]: { fields: buildFields(introspectionResults)(linkedType.fields) } };
+        }
+
+        // NOTE: We might have to handle linked types which are not resources but will have to be careful about
+        // ending with endless circular dependencies
+        return acc;
+    }, {});
 
 export const getArgType = arg => {
     if (arg.type.kind === TypeKind.NON_NULL) {
@@ -80,10 +80,9 @@ export const buildArgs = (query, variables) => {
     const validVariables = Object.keys(variables).filter(k => !!variables[k] && variables[k] !== null);
     let args = query.args
         .filter(a => validVariables.includes(a.name))
-        .map(arg => `${arg.name}: $${arg.name}`)
-        .join(', ');
+        .reduce((acc, arg) => ({ ...acc, [`${arg.name}`]: `$${arg.name}` }), {});
 
-    return `(${args})`;
+    return args;
 };
 
 export const buildApolloArgs = (query, variables) => {
@@ -93,22 +92,19 @@ export const buildApolloArgs = (query, variables) => {
 
     const validVariables = Object.keys(variables).filter(k => !!variables[k] && variables[k] !== null);
 
-    let args = query.args
-        .filter(a => validVariables.includes(a.name))
-        .map(arg => {
-            if (arg.name.endsWith('Ids')) {
-                return `$${arg.name}: [ID!]`;
-            }
+    let args = query.args.filter(a => validVariables.includes(a.name)).reduce((acc, arg) => {
+        if (arg.name.endsWith('Ids')) {
+            return { ...acc, [`$${arg.name}`]: '[ID!]' };
+        }
 
-            if (arg.name.endsWith('Id')) {
-                return `$${arg.name}: ID`;
-            }
+        if (arg.name.endsWith('Id')) {
+            return { ...acc, [`$${arg.name}`]: 'ID' };
+        }
 
-            return `$${arg.name}: ${getArgType(arg)}`;
-        })
-        .join(', ');
+        return { ...acc, [`$${arg.name}`]: getArgType(arg) };
+    }, {});
 
-    return `(${args})`;
+    return args;
 };
 
 // NOTE: Building queries by merging/concatenating strings is bad and dirty!
@@ -116,34 +112,57 @@ export const buildApolloArgs = (query, variables) => {
 // The query is actually a DocumentNode which is builded by the gql tag function.
 // We should investigate how to build such DocumentNode from introspection results
 // as it would be more robust.
-export const buildQuery = introspectionResults => (resource, aorFetchType, query, variables) => {
-    const queryType = getQueryType(aorFetchType);
-    const apolloArgs = buildApolloArgs(query, variables);
-    const args = buildArgs(query, variables);
+export const buildQuery = introspectionResults => (resource, aorFetchType, queryType, variables) => {
+    const apolloArgs = buildApolloArgs(queryType, variables);
+    const args = buildArgs(queryType, variables);
     const fields = buildFields(introspectionResults)(resource.type.fields);
-
     if (aorFetchType === GET_LIST || aorFetchType === GET_MANY || aorFetchType === GET_MANY_REFERENCE) {
-        const result = `${queryType} ${query.name}${apolloArgs} {
-            items: ${query.name}${args} { ${fields} }
-            total: _${query.name}Meta${args} { count }
-        }`;
+        const result = encodeQuery(queryType.name, {
+            params: apolloArgs,
+            fields: {
+                items: {
+                    field: queryType.name,
+                    params: args,
+                    fields,
+                },
+                total: {
+                    field: `_${queryType.name}Meta`,
+                    params: args,
+                    fields: { count: {} },
+                },
+            },
+        });
         return result;
     }
 
     if (aorFetchType === DELETE) {
-        const result = `${queryType} ${query.name}${apolloArgs} {
-            data: ${query.name}${args} {
-                id
-            }
-        }`;
-        return result;
+        return encodeMutation(queryType.name, {
+            params: apolloArgs,
+            fields: {
+                data: {
+                    field: queryType.name,
+                    params: args,
+                    fields: { id: {} },
+                },
+            },
+        });
     }
 
-    const result = `${queryType} ${query.name}${apolloArgs} {
-        data: ${query.name}${args} {
-            ${fields}
-        }
-    }`;
+    const query = {
+        params: apolloArgs,
+        fields: {
+            data: {
+                field: queryType.name,
+                params: args,
+                fields,
+            },
+        },
+    };
+
+    const result = QUERY_TYPES.includes(aorFetchType)
+        ? encodeQuery(queryType.name, query)
+        : encodeMutation(queryType.name, query);
+
     return result;
 };
 

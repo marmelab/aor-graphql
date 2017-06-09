@@ -46,7 +46,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "deploy": "npm run build && now ./build --public --name admin-on-rest-graphql"
+    "deploy": "yarn build && now ./build --name admin-on-rest-graphql"
   },
   "homepage": "http://marmelab.com/admin-on-rest-graphql-demo/"
 }
