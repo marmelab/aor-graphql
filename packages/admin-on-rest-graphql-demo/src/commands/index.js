@@ -2,6 +2,7 @@ import React from 'react';
 import {
     translate,
     AutocompleteInput,
+    FunctionField,
     BooleanField,
     BooleanInput,
     Datagrid,
@@ -22,6 +23,15 @@ import {
     TextInput,
 } from 'admin-on-rest';
 import Icon from 'material-ui/svg-icons/editor/attach-money';
+import {
+    Table,
+    TableBody,
+    TableHeader,
+    TableHeaderColumn,
+    TableRow,
+    TableRowColumn,
+} from 'material-ui/Table';
+import Paper from 'material-ui/Paper';
 
 import NbItemsField from './NbItemsField';
 import CustomerReferenceField from '../visitors/CustomerReferenceField';
@@ -68,7 +78,9 @@ const CommandTitle = translate(({ record, translate }) => <span>{translate('reso
 export const CommandEdit = translate(({ translate, ...rest }) => (
     <Edit title={<CommandTitle />} {...rest}>
         <SimpleForm>
-            <ReferenceManyField label="resources.Command.fields.basket" reference="CommandItem" target="command.id">
+            <FunctionField label="debug" render={record => console.log(record)} />
+
+            {/*<ReferenceManyField label="resources.Command.fields.basket" reference="CommandItem" target="command.id">
                 <Datagrid>
                     <ReferenceField source="product.id" reference="Product">
                         <TextField source="reference" />
@@ -79,11 +91,11 @@ export const CommandEdit = translate(({ translate, ...rest }) => (
                     <NumberField source="quantity" />
                     <EditButton />
                 </Datagrid>
-            </ReferenceManyField>
+            </ReferenceManyField>*/}
             <DateInput source="date" />
-            <ReferenceInput source="customer.id" reference="Customer">
+            {/*<ReferenceInput source="customer.id" reference="Customer">
                 <AutocompleteInput optionText={choice => `${choice.firstName} ${choice.lastName}`} />
-            </ReferenceInput>
+            </ReferenceInput>*/}
             <SelectInput
                 source="status" choices={[
                     { id: 'delivered', name: 'delivered' },

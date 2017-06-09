@@ -1,4 +1,5 @@
 import merge from 'lodash.merge';
+import get from 'lodash.get';
 import { ApolloClient } from 'apollo-client';
 import pluralize from 'pluralize';
 
@@ -37,6 +38,7 @@ export default async options => {
         introspection,
         resolveIntrospection,
         queryBuilder: queryBuilderFactory,
+        override = {},
         ...otherOptions
     } = merge({}, defaultOptions, options);
 
@@ -52,7 +54,14 @@ export default async options => {
     const queryBuilder = queryBuilderFactory(introspectionResults, otherOptions);
 
     const aorClient = (aorFetchType, resource, params) => {
-        const { parseResponse, ...query } = queryBuilder(aorFetchType, resource, params);
+        const overridedQueryBuilder = get(override, `${resource}.${aorFetchType}`);
+
+        const { parseResponse, ...query } = overridedQueryBuilder
+            ? {
+                ...queryBuilder(aorFetchType, resource, params),
+                ...overridedQueryBuilder(params),
+            }
+            : queryBuilder(aorFetchType, resource, params);
 
         if (QUERY_TYPES.includes(aorFetchType)) {
             const apolloQuery = {

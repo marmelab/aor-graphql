@@ -53,7 +53,7 @@ export default `
     }
 
     type CommandItem {
-        product_id: ID!
+        product: Product
         quantity: Int
     }
 
@@ -81,9 +81,9 @@ export default `
         id: ID!
         date: String
         status: String
-        customer: Customer        
-        product: Product        
-        command: Command        
+        customer: Customer
+        product: Product
+        command: Command
         rating: Int
         comment: String
     }
