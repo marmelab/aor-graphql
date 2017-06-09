@@ -8,6 +8,7 @@ install: ## Install dependencies
 
 test: ## Launch unit tests
 	./node_modules/.bin/jest --projects packages/aor-graphql-client packages/aor-graphql-client-graphcool packages/aor-graphql-client-simple
+	./node_modules/.bin/lerna run build
 
 watch-test: ## Launch unit tests
 	./node_modules/.bin/jest --watch --projects packages/aor-graphql-client packages/aor-graphql-client-graphcool packages/aor-graphql-client-simple
