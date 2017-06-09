@@ -50,6 +50,7 @@
     "babel-plugin-transform-runtime": "~6.23.0",
     "graphql": "~0.9.6",
     "graphql-tag": "~2.0.0",
+    "graphqlify": "~1.1.0",
     "lodash.merge": "~4.6.0",
     "pluralize": "~4.0.0"
   },

@@ -14,3 +14,6 @@ watch-test: ## Launch unit tests
 
 run:
 	@cd ./packages/admin-on-rest-graphql-demo && yarn start
+
+deploy:
+	@cd ./packages/admin-on-rest-graphql-demo && yarn deploy

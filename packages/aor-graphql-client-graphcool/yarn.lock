@@ -1793,6 +1793,10 @@ graphql@~0.9.6:
   dependencies:
     iterall "^1.0.0"
 
+graphqlify@~1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/graphqlify/-/graphqlify-1.1.0.tgz#1d1d81e37b209fc09742fe48da3ac4763e20ddc7"
+
 growly@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/growly/-/growly-1.3.0.tgz#f10748cbe76af964b7c96c93c6bcc28af120c081"
