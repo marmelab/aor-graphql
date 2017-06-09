@@ -28,7 +28,7 @@ export default translate(({ reviews = [], customers = {}, nb, translate }) => (
                     primaryText={<StarRatingField record={record} />}
                     secondaryText={record.comment}
                     secondaryTextLines={2}
-                    leftAvatar={customers[record.customer_id] ? <Avatar src={`${customers[record.customer_id].avatar}?size=32x32`} /> : <Avatar />}
+                    leftAvatar={customers[record['customer.id']] ? <Avatar src={`${customers[record['customer.id']].avatar}?size=32x32`} /> : <Avatar />}
                 />,
             )}
         </List>

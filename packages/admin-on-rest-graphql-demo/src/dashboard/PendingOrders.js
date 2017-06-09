@@ -18,14 +18,14 @@ export default translate(({ orders = [], customers = {}, translate }) => (
                     secondaryText={
                         <p>
                             {translate('pos.dashboard.order.items', {
-                                smart_count: record.basket.length,
-                                nb_items: record.basket.length,
-                                customer_name: customers[record.customer_id] ? `${customers[record.customer_id].first_name} ${customers[record.customer_id].last_name}` : '',
+                                smart_count: record.basketIds.length,
+                                nb_items: record.basketIds.length,
+                                customer_name: customers[record['customer.id']] ? `${customers[record['customer.id']].firstName} ${customers[record['customer.id']].lastName}` : '',
                             })}
                         </p>
                     }
                     rightAvatar={<strong>{record.total}$</strong>}
-                    leftAvatar={customers[record.customer_id] ? <Avatar src={`${customers[record.customer_id].avatar}?size=32x32`} /> : <Avatar />}
+                    leftAvatar={customers[record['customer.id']] ? <Avatar src={`${customers[record['customer.id']].avatar}?size=32x32`} /> : <Avatar />}
                 />,
             )}
         </List>

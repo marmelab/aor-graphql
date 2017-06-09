@@ -58,7 +58,7 @@ class Dashboard extends Component {
                         });
                         return pendingOrders;
                     })
-                    .then(pendingOrders => pendingOrders.map(order => order.customer.id))
+                    .then(pendingOrders => pendingOrders.map(order => order['customer.id']))
                     .then(customerIds => restClient(GET_MANY, 'Customer', { ids: customerIds }))
                     .then(response => response.data)
                     .then(customers => customers.reduce((prev, customer) => {
@@ -79,7 +79,7 @@ class Dashboard extends Component {
                         this.setState({ pendingReviews, nbPendingReviews });
                         return pendingReviews;
                     })
-                    .then(reviews => reviews.map(review => review.customer.id))
+                    .then(reviews => reviews.map(review => review['customer.id']))
                     .then(customerIds => restClient(GET_MANY, 'Customer', { ids: customerIds }))
                     .then(response => response.data)
                     .then(customers => customers.reduce((prev, customer) => {
