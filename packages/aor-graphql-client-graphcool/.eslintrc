@@ -3,7 +3,8 @@
     "env": {
         "es6": true,
         "mocha": true,
-        "node": true
+        "node": true,
+        "jest/globals": true
     },
     "extends": [
         "eslint:recommended",
@@ -12,7 +13,8 @@
         "prettier"
     ],
     "plugins": [
-        "prettier"
+        "prettier",
+        "jest"
     ],
     "rules": {
         "prettier/prettier": ["error", {

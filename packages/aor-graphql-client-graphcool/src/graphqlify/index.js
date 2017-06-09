@@ -43,8 +43,11 @@ function encodeOperation(type, _nameOrFields, _fieldsOrNil) {
         // stringifying the main query object
         fieldset = encodeFieldset(fields, null);
     }
-
-    parts.push(`${type} ${fieldset}`);
+    if (name) {
+        parts.push(`${type} ${name}${fieldset}`);
+    } else {
+        parts.push(`${type}${fieldset}`);
+    }
 
     const fragments = findFragments(fields);
     if (fragments.length) {
