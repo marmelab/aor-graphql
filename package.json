@@ -1,4 +1,7 @@
 {
+  "name": "aor-graphql",
+  "description": "Packages related to using GraphQL with Admin-on-rest",
+  "version": "0.0.1",
   "scripts": {
     "test": "make test"
   },
