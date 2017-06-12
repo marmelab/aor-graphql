@@ -1,5 +1,6 @@
 import { TypeKind } from 'graphql';
-import { buildApolloArgs, buildArgs, buildFields, getArgType } from './buildQuery';
+import buildQuery, { buildApolloArgs, buildArgs, buildFields, getArgType } from './buildQuery';
+import { GET_LIST, GET_MANY, GET_MANY_REFERENCE, GET_ONE, DELETE, UPDATE } from 'aor-graphql-client/lib/constants';
 
 describe('getArgType', () => {
     it('returns the arg type name', () => {
@@ -79,5 +80,79 @@ describe('buildFields', () => {
                 fields: { id: {} },
             },
         });
+    });
+});
+
+describe('buildQuery', () => {
+    const introspectionResults = {
+        resources: [{ type: { name: 'resourceType' } }],
+        types: [
+            {
+                name: 'linkedType',
+                fields: [{ name: 'foo', type: { kind: TypeKind.SCALAR, name: 'bar' } }],
+            },
+        ],
+    };
+
+    const resource = {
+        type: {
+            fields: [
+                { type: { kind: TypeKind.SCALAR, name: '' }, name: 'foo' },
+                { type: { kind: TypeKind.SCALAR, name: '_foo' }, name: 'foo1' },
+                { type: { kind: TypeKind.OBJECT, name: 'linkedType' }, name: 'linked' },
+                { type: { kind: TypeKind.OBJECT, name: 'resourceType' }, name: 'resource' },
+            ],
+        },
+    };
+
+    const queryType = {
+        name: 'allCommand',
+        args: [
+            {
+                name: 'foo',
+                type: { kind: TypeKind.NON_NULL, ofType: { kind: TypeKind.SCALAR, name: 'Int' } },
+            },
+            {
+                name: 'barId',
+                type: { kind: TypeKind.SCALAR },
+            },
+            {
+                name: 'barIds',
+                type: { kind: TypeKind.SCALAR },
+            },
+            { name: 'bar' },
+        ],
+    };
+    const params = { foo: 'foo_value' };
+
+    it('returns the correct query for GET_LIST', () => {
+        expect(buildQuery(introspectionResults)(resource, GET_LIST, queryType, params)).toEqual(
+            'query allCommand($foo:Int!){items:allCommand(foo:$foo){foo,linked{foo},resource{id}},total:_allCommandMeta(foo:$foo){count}}',
+        );
+    });
+    it('returns the correct query for GET_MANY', () => {
+        expect(buildQuery(introspectionResults)(resource, GET_MANY, queryType, params)).toEqual(
+            'query allCommand($foo:Int!){items:allCommand(foo:$foo){foo,linked{foo},resource{id}},total:_allCommandMeta(foo:$foo){count}}',
+        );
+    });
+    it('returns the correct query for GET_MANY_REFERENCE', () => {
+        expect(buildQuery(introspectionResults)(resource, GET_MANY_REFERENCE, queryType, params)).toEqual(
+            'query allCommand($foo:Int!){items:allCommand(foo:$foo){foo,linked{foo},resource{id}},total:_allCommandMeta(foo:$foo){count}}',
+        );
+    });
+    it('returns the correct query for GET_ONE', () => {
+        expect(
+            buildQuery(introspectionResults)(resource, GET_ONE, { ...queryType, name: 'getCommand' }, params),
+        ).toEqual('query getCommand($foo:Int!){data:getCommand(foo:$foo){foo,linked{foo},resource{id}}}');
+    });
+    it('returns the correct query for UPDATE', () => {
+        expect(
+            buildQuery(introspectionResults)(resource, UPDATE, { ...queryType, name: 'updateCommand' }, params),
+        ).toEqual('mutation updateCommand($foo:Int!){data:updateCommand(foo:$foo){foo,linked{foo},resource{id}}}');
+    });
+    it('returns the correct query for DELETE', () => {
+        expect(
+            buildQuery(introspectionResults)(resource, DELETE, { ...queryType, name: 'deleteCommand' }, params),
+        ).toEqual('mutation deleteCommand($foo:Int!){data:deleteCommand(foo:$foo){id}}');
     });
 });

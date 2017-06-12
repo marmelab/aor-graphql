@@ -96,6 +96,7 @@ export default introspectionResults => (resource, aorFetchType, queryType, varia
                 },
             },
         });
+
         return result;
     }
 
