@@ -7,35 +7,34 @@ export default () => buildApolloClient({
     client: apolloClient,
     override: {
         Command: {
-            GET_ONE: {
-                query: () => gql`{
-    query Command($id: ID!) {
-        data: Command(id: $id) {
+            GET_ONE: () => ({
+                query: gql`
+query Command($id: ID!) {
+    data: Command(id: $id) {
+        id
+        date
+        status
+        returned
+        taxRate
+        total
+        deliveryFees
+        customer {
             id
-            date
-            status
-            returned
-            taxRate
-            total
-            deliveryFees
-            customer {
+            firstName
+            lastName
+        }
+        basket {
+            product {
                 id
-                firstName
-                lastName
+                reference
+                price
+                stock
             }
-            basket {
-                product {
-                    id
-                    reference
-                    price
-                    stock
-                }
-                quantity
-            }
+            quantity
         }
     }
 }`,
-            },
+            }),
         },
     },
 });

@@ -79,23 +79,7 @@ export const CommandEdit = translate(({ translate, ...rest }) => (
     <Edit title={<CommandTitle />} {...rest}>
         <SimpleForm>
             <FunctionField label="debug" render={record => console.log(record)} />
-
-            {/*<ReferenceManyField label="resources.Command.fields.basket" reference="CommandItem" target="command.id">
-                <Datagrid>
-                    <ReferenceField source="product.id" reference="Product">
-                        <TextField source="reference" />
-                    </ReferenceField>
-                    <ReferenceField source="product.id" reference="Product" label="resources.Product.fields.price" linkType={false}>
-                        <NumberField source="price" options={{ style: 'currency', currency: 'USD' }} />
-                    </ReferenceField>
-                    <NumberField source="quantity" />
-                    <EditButton />
-                </Datagrid>
-            </ReferenceManyField>*/}
             <DateInput source="date" />
-            {/*<ReferenceInput source="customer.id" reference="Customer">
-                <AutocompleteInput optionText={choice => `${choice.firstName} ${choice.lastName}`} />
-            </ReferenceInput>*/}
             <SelectInput
                 source="status" choices={[
                     { id: 'delivered', name: 'delivered' },
