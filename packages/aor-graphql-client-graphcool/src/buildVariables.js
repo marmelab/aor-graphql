@@ -8,7 +8,7 @@ import {
     DELETE,
 } from 'aor-graphql-client/lib/constants';
 
-export const buildGetListVariables = introspectionResults => (resource, aorFetchType, params) => {
+const buildGetListVariables = introspectionResults => (resource, aorFetchType, params) => {
     const filter = Object.keys(params.filter).reduce((acc, key) => {
         if (key === 'ids') {
             return { ...acc, id_in: params.filter[key] };
@@ -61,7 +61,7 @@ export const buildGetListVariables = introspectionResults => (resource, aorFetch
     };
 };
 
-export const buildCreateUpdateVariables = () => (resource, aorFetchType, params, queryType) =>
+const buildCreateUpdateVariables = () => (resource, aorFetchType, params, queryType) =>
     Object.keys(params.data).reduce((acc, key) => {
         if (Array.isArray(params.data[key])) {
             const arg = queryType.args.find(a => a.name === `${key}Ids`);
