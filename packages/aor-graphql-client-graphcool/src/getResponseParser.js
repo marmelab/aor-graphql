@@ -34,6 +34,8 @@ const sanitizeResource = (introspectionResults, resource) => data => {
                 [field.name]: sanitizeResource(introspectionResults, linkedResource)(data[field.name]),
             };
         }
+
+        return { ...acc, [field.name]: data[field.name] };
     }, {});
 
     return result;
