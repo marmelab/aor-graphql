@@ -1,158 +1,53 @@
-import { TypeKind } from 'graphql';
-import buildQuery, { buildApolloArgs, buildArgs, buildFields, getArgType } from './buildQuery';
-import { GET_LIST, GET_MANY, GET_MANY_REFERENCE, GET_ONE, DELETE, UPDATE } from 'aor-graphql-client/lib/constants';
-
-describe('getArgType', () => {
-    it('returns the arg type name', () => {
-        expect(getArgType({ type: { kind: TypeKind.SCALAR, name: 'foo' } })).toEqual('foo');
-    });
-    it('returns the arg type name for NON_NULL types', () => {
-        expect(getArgType({ type: { kind: TypeKind.NON_NULL, ofType: { name: 'foo' } } })).toEqual('foo!');
-    });
-});
-
-describe('buildArgs', () => {
-    it('returns an empty array when query does not have any arguments', () => {
-        expect(buildArgs({ args: [] })).toEqual({});
-    });
-
-    it('returns an array of args correctly filtered when query has arguments', () => {
-        expect(buildArgs({ args: [{ name: 'foo' }, { name: 'bar' }] }, { foo: 'foo_value' })).toEqual({ foo: '$foo' });
-    });
-});
-
-describe('buildApolloArgs', () => {
-    it('returns an empty array when query does not have any arguments', () => {
-        expect(buildApolloArgs({ args: [] })).toEqual({});
-    });
-
-    it('returns an array of args correctly filtered when query has arguments', () => {
-        expect(
-            buildApolloArgs(
-                {
-                    args: [
-                        {
-                            name: 'foo',
-                            type: { kind: TypeKind.NON_NULL, ofType: { kind: TypeKind.SCALAR, name: 'Int' } },
-                        },
-                        {
-                            name: 'barId',
-                            type: { kind: TypeKind.SCALAR },
-                        },
-                        {
-                            name: 'barIds',
-                            type: { kind: TypeKind.SCALAR },
-                        },
-                        { name: 'bar' },
-                    ],
-                },
-                { foo: 'foo_value', barId: 100, barIds: [101, 102] },
-            ),
-        ).toEqual({ $foo: 'Int!', $barId: 'ID!', $barIds: '[ID!]!' });
-    });
-});
-
-describe('buildFields', () => {
-    it('returns an object with the fields to retrieve', () => {
-        const introspectionResults = {
-            resources: [{ type: { name: 'resourceType' } }],
-            types: [
-                {
-                    name: 'linkedType',
-                    fields: [{ name: 'foo', type: { kind: TypeKind.SCALAR, name: 'bar' } }],
-                },
-            ],
-        };
-
-        const fields = [
-            { type: { kind: TypeKind.SCALAR, name: '' }, name: 'foo' },
-            { type: { kind: TypeKind.SCALAR, name: '_foo' }, name: 'foo1' },
-            { type: { kind: TypeKind.OBJECT, name: 'linkedType' }, name: 'linked' },
-            { type: { kind: TypeKind.OBJECT, name: 'resourceType' }, name: 'resource' },
-        ];
-
-        expect(buildFields(introspectionResults)(fields)).toEqual({
-            foo: {},
-            linked: {
-                fields: { foo: {} },
-            },
-            resource: {
-                fields: { id: {} },
-            },
-        });
-    });
-});
+import gql from 'graphql-tag';
+import { buildQueryFactory } from './buildQuery';
 
 describe('buildQuery', () => {
-    const introspectionResults = {
-        resources: [{ type: { name: 'resourceType' } }],
-        types: [
-            {
-                name: 'linkedType',
-                fields: [{ name: 'foo', type: { kind: TypeKind.SCALAR, name: 'bar' } }],
-            },
-        ],
-    };
+    const queryType = 'query_type';
 
     const resource = {
-        type: {
-            fields: [
-                { type: { kind: TypeKind.SCALAR, name: '' }, name: 'foo' },
-                { type: { kind: TypeKind.SCALAR, name: '_foo' }, name: 'foo1' },
-                { type: { kind: TypeKind.OBJECT, name: 'linkedType' }, name: 'linked' },
-                { type: { kind: TypeKind.OBJECT, name: 'resourceType' }, name: 'resource' },
-            ],
-        },
+        type: { name: 'Post' },
+        GET_LIST: queryType,
+    };
+    const introspectionResults = {
+        resources: [resource],
     };
 
-    const queryType = {
-        name: 'allCommand',
-        args: [
-            {
-                name: 'foo',
-                type: { kind: TypeKind.NON_NULL, ofType: { kind: TypeKind.SCALAR, name: 'Int' } },
-            },
-            {
-                name: 'barId',
-                type: { kind: TypeKind.SCALAR },
-            },
-            {
-                name: 'barIds',
-                type: { kind: TypeKind.SCALAR },
-            },
-            { name: 'bar' },
-        ],
-    };
-    const params = { foo: 'foo_value' };
+    it('throws an error if resource is unknown', () => {
+        expect(() => buildQueryFactory()(introspectionResults)('GET_LIST', 'Comment')).toThrow(
+            'Unknown resource undefined. Make sure it has been declared on your server side schema. Known resources are Post',
+        );
+    });
 
-    it('returns the correct query for GET_LIST', () => {
-        expect(buildQuery(introspectionResults)(resource, GET_LIST, queryType, params)).toEqual(
-            'query allCommand($foo:Int!){items:allCommand(foo:$foo){foo,linked{foo},resource{id}},total:_allCommandMeta(foo:$foo){count}}',
+    it('throws an error if resource does not have a query or mutation for specified AOR fetch type', () => {
+        expect(() => buildQueryFactory()(introspectionResults)('CREATE', 'Post')).toThrow(
+            'No query or mutation matching aor fetch type CREATE could be found for resource Post',
         );
     });
-    it('returns the correct query for GET_MANY', () => {
-        expect(buildQuery(introspectionResults)(resource, GET_MANY, queryType, params)).toEqual(
-            'query allCommand($foo:Int!){items:allCommand(foo:$foo){foo,linked{foo},resource{id}},total:_allCommandMeta(foo:$foo){count}}',
-        );
-    });
-    it('returns the correct query for GET_MANY_REFERENCE', () => {
-        expect(buildQuery(introspectionResults)(resource, GET_MANY_REFERENCE, queryType, params)).toEqual(
-            'query allCommand($foo:Int!){items:allCommand(foo:$foo){foo,linked{foo},resource{id}},total:_allCommandMeta(foo:$foo){count}}',
-        );
-    });
-    it('returns the correct query for GET_ONE', () => {
+
+    it('description', () => {
+        const buildVariables = jest.fn(() => ({ foo: true }));
+        const buildGqlQuery = jest.fn(() => 'query { id }');
+        const getResponseParser = jest.fn(() => 'parseResponseFunction');
+        const buildVariablesFactory = jest.fn(() => buildVariables);
+        const buildGqlQueryFactory = jest.fn(() => buildGqlQuery);
+        const getResponseParserFactory = jest.fn(() => getResponseParser);
+
         expect(
-            buildQuery(introspectionResults)(resource, GET_ONE, { ...queryType, name: 'getCommand' }, params),
-        ).toEqual('query getCommand($foo:Int!){data:getCommand(foo:$foo){foo,linked{foo},resource{id}}}');
-    });
-    it('returns the correct query for UPDATE', () => {
-        expect(
-            buildQuery(introspectionResults)(resource, UPDATE, { ...queryType, name: 'updateCommand' }, params),
-        ).toEqual('mutation updateCommand($foo:Int!){data:updateCommand(foo:$foo){foo,linked{foo},resource{id}}}');
-    });
-    it('returns the correct query for DELETE', () => {
-        expect(
-            buildQuery(introspectionResults)(resource, DELETE, { ...queryType, name: 'deleteCommand' }, params),
-        ).toEqual('mutation deleteCommand($foo:Int!){data:deleteCommand(foo:$foo){id}}');
+            buildQueryFactory(buildVariablesFactory, buildGqlQueryFactory, getResponseParserFactory)(
+                introspectionResults,
+            )('GET_LIST', 'Post', { foo: 'bar' }),
+        ).toEqual({
+            query: gql`query { id }`,
+            variables: { foo: true },
+            parseResponse: 'parseResponseFunction',
+        });
+
+        expect(buildVariablesFactory).toHaveBeenCalledWith(introspectionResults);
+        expect(buildGqlQueryFactory).toHaveBeenCalledWith(introspectionResults);
+        expect(getResponseParserFactory).toHaveBeenCalledWith(introspectionResults);
+
+        expect(buildVariables).toHaveBeenCalledWith(resource, 'GET_LIST', { foo: 'bar' }, queryType);
+        expect(buildGqlQuery).toHaveBeenCalledWith(resource, 'GET_LIST', queryType, { foo: true });
+        expect(getResponseParser).toHaveBeenCalledWith('GET_LIST', resource, queryType);
     });
 });
