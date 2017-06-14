@@ -12,12 +12,14 @@ export default () => buildApolloClient({
 query Command($id: ID!) {
     data: Command(id: $id) {
         id
+        reference
         date
         status
         returned
         taxRate
         total
         deliveryFees
+        totalExTaxes
         customer {
             id
             firstName

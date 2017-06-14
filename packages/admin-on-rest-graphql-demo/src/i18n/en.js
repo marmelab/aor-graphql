@@ -51,7 +51,15 @@ export default {
             name: 'Order |||| Orders',
             fields: {
                 customer: { id: 'Customer' },
-                basket: 'Basket',
+                basket: {
+                    delivery: 'Delivery',
+                    reference: 'Reference',
+                    quantity: 'Quantity',
+                    sum: 'Sum',
+                    tax_rate: 'Tax Rate',
+                    total: 'Total',
+                    unit_price: 'Unit Price',
+                },
                 date_gte: 'Passed Since',
                 date_lte: 'Passed Before',
                 total_gte: 'Min amount',

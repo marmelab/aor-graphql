@@ -35,6 +35,7 @@ import Paper from 'material-ui/Paper';
 
 import NbItemsField from './NbItemsField';
 import CustomerReferenceField from '../visitors/CustomerReferenceField';
+import Basket from './Basket';
 
 export const CommandIcon = Icon;
 
@@ -73,15 +74,19 @@ export const CommandList = props => (
     </List>
 );
 
-const CommandTitle = translate(({ record, translate }) => <span>{translate('resources.Command.name', { smart_count: 1 })} #{record.reference}</span>);
+const CommandTitle = translate(({ record, translate }) => console.log({record}) || <span>{translate('resources.Command.name', { smart_count: 1 })} #{record.reference}</span>);
 
 export const CommandEdit = translate(({ translate, ...rest }) => (
     <Edit title={<CommandTitle />} {...rest}>
         <SimpleForm>
-            <FunctionField label="debug" render={record => console.log(record)} />
+            <Basket />
             <DateInput source="date" />
+            <ReferenceInput source="customer.id" reference="Customer">
+                <AutocompleteInput optionText={choice => `${choice.firstName} ${choice.lastName}`} />
+            </ReferenceInput>
             <SelectInput
-                source="status" choices={[
+                source="status"
+                choices={[
                     { id: 'delivered', name: 'delivered' },
                     { id: 'ordered', name: 'ordered' },
                     { id: 'cancelled', name: 'cancelled' },
