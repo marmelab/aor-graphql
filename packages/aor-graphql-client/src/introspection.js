@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 
 import { GET_LIST, GET_ONE, ALL_TYPES } from './constants';
 
-export const includeExclude = ({ include, exclude }) => {
+export const filterTypesByIncludeExclude = ({ include, exclude }) => {
     if (include) {
         if (Array.isArray(include)) {
             return type => include.includes(type.name);
@@ -19,7 +19,7 @@ export const includeExclude = ({ include, exclude }) => {
             return type => !exclude.includes(type.name);
         }
 
-        if (typeof inclexcludeude === 'function') {
+        if (typeof exclude === 'function') {
             return type => !exclude(type);
         }
     }
@@ -34,17 +34,13 @@ export const includeExclude = ({ include, exclude }) => {
 export default async (client, options) => {
     const schema = await client.query({ query: gql`${introspectionQuery}` }).then(({ data: { __schema } }) => __schema);
 
-    const queries = schema.types
-        .reduce((acc, type) => {
-            if (type.name !== 'Query' && type.name !== 'Mutation') return acc;
+    const queries = schema.types.reduce((acc, type) => {
+        if (type.name !== 'Query' && type.name !== 'Mutation') return acc;
 
-            return [...acc, ...type.fields];
-        }, [])
-        .filter(includeExclude(options));
+        return [...acc, ...type.fields];
+    }, []);
 
-    const types = schema.types
-        .filter(type => type.name !== 'Query' && type.name !== 'Mutation')
-        .filter(includeExclude(options));
+    const types = schema.types.filter(type => type.name !== 'Query' && type.name !== 'Mutation');
 
     const isResource = type =>
         queries.some(query => query.name === options.operationNames[GET_LIST](type)) &&
@@ -59,7 +55,7 @@ export default async (client, options) => {
             { type },
         );
 
-    const resources = types.filter(isResource).map(buildResource);
+    const resources = types.filter(isResource).filter(filterTypesByIncludeExclude(options)).map(buildResource);
 
     return {
         types,
