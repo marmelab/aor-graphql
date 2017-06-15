@@ -1,6 +1,6 @@
 // Encodes a graphql query
 const graphqlify = function(fields) {
-    return encodeOperation('', fields);
+    return encodeOperation('query', fields);
 };
 
 // Encodes a graphql query
@@ -35,14 +35,16 @@ function encodeOperation(type, _nameOrFields, _fieldsOrNil) {
 
     if (name && (fields.params || fields.fields)) {
         fieldset = encodeField(name, fields);
+        parts.push(`${type} ${fieldset}`);
     } else {
         // stringifying the main query object
         fieldset = encodeFieldset(fields, null);
-    }
-    if (name) {
-        parts.push(`${type} ${name}${fieldset}`);
-    } else {
-        parts.push(`${type}${fieldset}`);
+
+        if (name) {
+            parts.push(`${type} ${name}${fieldset}`);
+        } else {
+            parts.push(`${type} ${fieldset}`);
+        }
     }
 
     return parts.join(',');

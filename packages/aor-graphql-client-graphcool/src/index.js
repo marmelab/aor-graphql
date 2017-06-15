@@ -1,9 +1,9 @@
 import merge from 'lodash.merge';
 import buildClient from 'aor-graphql-client';
-import queryBuilder from './queryBuilder';
+import buildQuery from './buildQuery';
 
 const defaultOptions = {
-    queryBuilder,
+    queryBuilder: buildQuery,
 };
 
 export default options => {

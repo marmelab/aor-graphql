@@ -1,4 +1,10 @@
 {
+  "name": "aor-graphql",
+  "description": "Packages related to using GraphQL with Admin-on-rest",
+  "version": "0.0.1",
+  "scripts": {
+    "test": "make test"
+  },
   "devDependencies": {
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
