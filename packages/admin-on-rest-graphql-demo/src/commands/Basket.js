@@ -18,7 +18,7 @@ class Basket extends Component {
     }
     fetchData() {
         const { record: { basket }, crudGetMany } = this.props;
-        crudGetMany('Product', basket.map(item => item.product.id));
+        crudGetMany('Product', basket.map(item => item.product && item.product.id).filter(v => !!v));
     }
     render() {
         const { record, products, translate } = this.props;
@@ -44,7 +44,7 @@ class Basket extends Component {
                         </TableRow>
                     </TableHeader>
                     <TableBody displayRowCheckbox={false}>
-                        {basket.map(item => (
+                        {basket.map(item => item.product && (
                             <TableRow key={item.product.id}>
                                 <TableRowColumn>
                                     {item.product.reference}
@@ -97,7 +97,7 @@ class Basket extends Component {
 
 const mapStateToProps = (state, props) => {
     const { record: { basket } } = props;
-    const productIds = basket.map(item => item.product.id);
+    const productIds = basket.map(item => item.product && item.product.id);
     return {
         products: productIds
             .map(productId => state.admin.Product.data[productId])
