@@ -4,11 +4,11 @@ import pluralize from 'pluralize';
 
 import buildApolloClient from './buildApolloClient';
 import { GET_LIST, GET_ONE, GET_MANY, GET_MANY_REFERENCE, CREATE, UPDATE, DELETE, QUERY_TYPES } from './constants';
-import introspectionResolve from './introspection';
+import defaultResolveIntrospection from './introspection';
 
 const defaultOptions = {
+    resolveIntrospection: defaultResolveIntrospection,
     introspection: {
-        resolve: introspectionResolve,
         operationNames: {
             [GET_LIST]: resource => `all${pluralize(resource.name)}`,
             [GET_ONE]: resource => `${resource.name}`,
@@ -18,8 +18,8 @@ const defaultOptions = {
             [UPDATE]: resource => `update${resource.name}`,
             [DELETE]: resource => `delete${resource.name}`,
         },
-        excludes: [],
-        includes: [],
+        exclude: [],
+        include: [],
     },
 };
 
@@ -32,11 +32,13 @@ const getOptions = (options, aorFetchType, resource) => {
 };
 
 export default async options => {
-    const { client: clientOptions, introspection, queryBuilder: queryBuilderFactory, ...otherOptions } = merge(
-        {},
-        defaultOptions,
-        options,
-    );
+    const {
+        client: clientOptions,
+        introspection,
+        resolveIntrospection,
+        queryBuilder: queryBuilderFactory,
+        ...otherOptions
+    } = merge({}, defaultOptions, options);
 
     const client = clientOptions && clientOptions instanceof ApolloClient
         ? clientOptions
@@ -44,7 +46,7 @@ export default async options => {
 
     let introspectionResults;
     if (introspection) {
-        introspectionResults = await introspection.resolve(client, introspection);
+        introspectionResults = await resolveIntrospection(client, introspection);
     }
 
     const queryBuilder = queryBuilderFactory(introspectionResults, otherOptions);
