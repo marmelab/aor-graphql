@@ -55,7 +55,9 @@ export default async (client, options) => {
             { type },
         );
 
-    const resources = types.filter(isResource).filter(filterTypesByIncludeExclude(options)).map(buildResource);
+    const potentialResources = types.filter(isResource);
+    const filteredResources = potentialResources.filter(filterTypesByIncludeExclude(options));
+    const resources = filteredResources.map(buildResource);
 
     return {
         types,

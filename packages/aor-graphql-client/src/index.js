@@ -18,8 +18,8 @@ const defaultOptions = {
             [UPDATE]: resource => `update${resource.name}`,
             [DELETE]: resource => `delete${resource.name}`,
         },
-        exclude: [],
-        include: [],
+        exclude: undefined,
+        include: undefined,
     },
 };
 
