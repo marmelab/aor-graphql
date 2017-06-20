@@ -19,8 +19,17 @@ run: ## Start the demo app
 deploy: ## Deply the demo app
 	@cd ./packages/admin-on-rest-graphql-demo && yarn deploy
 
-
-
 build: ## build the packages
 	@cd ./packages/aor-graphql-client-graphcool && ${MAKE} build
 	@cd ./packages/aor-graphql-client && ${MAKE} build
+
+watch: ## build the packages
+	@cd ./packages/aor-graphql-client && ${MAKE} watch > /tmp/log &
+	p1=$!
+	@cd ./packages/aor-graphql-client-graphcool && ${MAKE} watch > /tmp/log &
+	p2=$!
+	tail -f /tmp/log
+	trap 'kill "$p1"; kill "$p2"' SIGINT
+	while kill -s 0 "$p1" || kill -s 0 "$p2"; do
+	wait "$p1"; wait "$p2"
+	done &>/dev/null
