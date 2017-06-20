@@ -18,3 +18,9 @@ run: ## Start the demo app
 
 deploy: ## Deply the demo app
 	@cd ./packages/admin-on-rest-graphql-demo && yarn deploy
+
+
+
+build: ## build the packages
+	@cd ./packages/aor-graphql-client-graphcool && ${MAKE} build
+	@cd ./packages/aor-graphql-client && ${MAKE} build
