@@ -2,7 +2,6 @@ import React from 'react';
 import {
     translate,
     AutocompleteInput,
-    FunctionField,
     BooleanField,
     BooleanInput,
     Datagrid,
@@ -15,23 +14,12 @@ import {
     NullableBooleanInput,
     NumberField,
     ReferenceInput,
-    ReferenceField,
-    ReferenceManyField,
     SelectInput,
     SimpleForm,
     TextField,
     TextInput,
 } from 'admin-on-rest';
 import Icon from 'material-ui/svg-icons/editor/attach-money';
-import {
-    Table,
-    TableBody,
-    TableHeader,
-    TableHeaderColumn,
-    TableRow,
-    TableRowColumn,
-} from 'material-ui/Table';
-import Paper from 'material-ui/Paper';
 
 import NbItemsField from './NbItemsField';
 import CustomerReferenceField from '../visitors/CustomerReferenceField';
@@ -74,7 +62,7 @@ export const CommandList = props => (
     </List>
 );
 
-const CommandTitle = translate(({ record, translate }) => console.log({record}) || <span>{translate('resources.Command.name', { smart_count: 1 })} #{record.reference}</span>);
+const CommandTitle = translate(({ record, translate }) => <span>{translate('resources.Command.name', { smart_count: 1 })} #{record.reference}</span>);
 
 export const CommandEdit = translate(({ translate, ...rest }) => (
     <Edit title={<CommandTitle />} {...rest}>

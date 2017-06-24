@@ -3,12 +3,7 @@ import gql from 'graphql-tag';
 
 import apolloClient from './apolloClient';
 
-export default () => buildApolloClient({
-    client: apolloClient,
-    override: {
-        Command: {
-            GET_ONE: () => ({
-                query: gql`
+const getOneCommandQuery = gql`
 query Command($id: ID!) {
     data: Command(id: $id) {
         id
@@ -26,6 +21,7 @@ query Command($id: ID!) {
             lastName
         }
         basket {
+            id
             product {
                 id
                 reference
@@ -35,7 +31,14 @@ query Command($id: ID!) {
             quantity
         }
     }
-}`,
+}`;
+
+export default () => buildApolloClient({
+    client: apolloClient,
+    override: {
+        Command: {
+            GET_ONE: () => ({
+                query: getOneCommandQuery,
             }),
         },
     },
