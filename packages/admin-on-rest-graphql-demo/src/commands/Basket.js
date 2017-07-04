@@ -21,7 +21,7 @@ class Basket extends Component {
         crudGetMany('Product', basket.map(item => item.product && item.product.id).filter(v => !!v));
     }
     render() {
-        const { record, products, translate } = this.props;
+        const { record, translate } = this.props;
         const { basket } = record;
 
         return (
