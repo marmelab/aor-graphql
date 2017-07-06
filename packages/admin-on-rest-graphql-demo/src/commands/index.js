@@ -14,8 +14,6 @@ import {
     NullableBooleanInput,
     NumberField,
     ReferenceInput,
-    ReferenceField,
-    ReferenceManyField,
     SelectInput,
     SimpleForm,
     TextField,
@@ -25,6 +23,7 @@ import Icon from 'material-ui/svg-icons/editor/attach-money';
 
 import NbItemsField from './NbItemsField';
 import CustomerReferenceField from '../visitors/CustomerReferenceField';
+import Basket from './Basket';
 
 export const CommandIcon = Icon;
 
@@ -68,24 +67,14 @@ const CommandTitle = translate(({ record, translate }) => <span>{translate('reso
 export const CommandEdit = translate(({ translate, ...rest }) => (
     <Edit title={<CommandTitle />} {...rest}>
         <SimpleForm>
-            <ReferenceManyField label="resources.Command.fields.basket" reference="CommandItem" target="command.id">
-                <Datagrid>
-                    <ReferenceField source="product.id" reference="Product">
-                        <TextField source="reference" />
-                    </ReferenceField>
-                    <ReferenceField source="product.id" reference="Product" label="resources.Product.fields.price" linkType={false}>
-                        <NumberField source="price" options={{ style: 'currency', currency: 'USD' }} />
-                    </ReferenceField>
-                    <NumberField source="quantity" />
-                    <EditButton />
-                </Datagrid>
-            </ReferenceManyField>
+            <Basket />
             <DateInput source="date" />
             <ReferenceInput source="customer.id" reference="Customer">
                 <AutocompleteInput optionText={choice => `${choice.firstName} ${choice.lastName}`} />
             </ReferenceInput>
             <SelectInput
-                source="status" choices={[
+                source="status"
+                choices={[
                     { id: 'delivered', name: 'delivered' },
                     { id: 'ordered', name: 'ordered' },
                     { id: 'cancelled', name: 'cancelled' },

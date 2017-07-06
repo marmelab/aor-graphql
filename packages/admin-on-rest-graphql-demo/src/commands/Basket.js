@@ -18,10 +18,10 @@ class Basket extends Component {
     }
     fetchData() {
         const { record: { basket }, crudGetMany } = this.props;
-        crudGetMany('Product', basket.map(item => item.product.id));
+        crudGetMany('Product', basket.map(item => item.product && item.product.id).filter(v => !!v));
     }
     render() {
-        const { record, products, translate } = this.props;
+        const { record, translate } = this.props;
         const { basket } = record;
 
         return (
@@ -44,19 +44,19 @@ class Basket extends Component {
                         </TableRow>
                     </TableHeader>
                     <TableBody displayRowCheckbox={false}>
-                        {basket.map(item => products[item.product_id] && (
-                            <TableRow key={item.product_id}>
+                        {basket.map(item => item.product && (
+                            <TableRow key={item.product.id}>
                                 <TableRowColumn>
-                                    {products[item.product_id].reference}
+                                    {item.product.reference}
                                 </TableRowColumn>
                                 <TableRowColumn style={{ textAlign: 'right' }}>
-                                    {products[item.product_id].price.toLocaleString(undefined, { style: 'currency', currency: 'USD' })}
+                                    {item.product.price.toLocaleString(undefined, { style: 'currency', currency: 'USD' })}
                                 </TableRowColumn>
                                 <TableRowColumn style={{ textAlign: 'right' }}>
                                     {item.quantity}
                                 </TableRowColumn>
                                 <TableRowColumn style={{ textAlign: 'right' }}>
-                                    {(products[item.product_id].price * item.quantity).toLocaleString(undefined, { style: 'currency', currency: 'USD' })}
+                                    {(item.product.price * item.quantity).toLocaleString(undefined, { style: 'currency', currency: 'USD' })}
                                 </TableRowColumn>
                             </TableRow>),
                         )}
@@ -64,21 +64,21 @@ class Basket extends Component {
                             <TableRowColumn colSpan={2} />
                             <TableRowColumn>{translate('resources.Command.fields.basket.sum')}</TableRowColumn>
                             <TableRowColumn style={{ textAlign: 'right' }}>
-                                {record.total_ex_taxes.toLocaleString(undefined, { style: 'currency', currency: 'USD' })}
+                                {record.totalExTaxes.toLocaleString(undefined, { style: 'currency', currency: 'USD' })}
                             </TableRowColumn>
                         </TableRow>
                         <TableRow>
                             <TableRowColumn colSpan={2} />
                             <TableRowColumn>{translate('resources.Command.fields.basket.delivery')}</TableRowColumn>
                             <TableRowColumn style={{ textAlign: 'right' }}>
-                                {record.delivery_fees.toLocaleString(undefined, { style: 'currency', currency: 'USD' })}
+                                {record.deliveryFees.toLocaleString(undefined, { style: 'currency', currency: 'USD' })}
                             </TableRowColumn>
                         </TableRow>
                         <TableRow>
                             <TableRowColumn colSpan={2} />
                             <TableRowColumn>{translate('resources.Command.fields.basket.tax_rate')}</TableRowColumn>
                             <TableRowColumn style={{ textAlign: 'right' }}>
-                                {record.tax_rate.toLocaleString(undefined, { style: 'percent' })}
+                                {record.taxRate.toLocaleString(undefined, { style: 'percent' })}
                             </TableRowColumn>
                         </TableRow>
                         <TableRow>
@@ -97,7 +97,7 @@ class Basket extends Component {
 
 const mapStateToProps = (state, props) => {
     const { record: { basket } } = props;
-    const productIds = basket.map(item => item.product.id);
+    const productIds = basket.map(item => item.product && item.product.id);
     return {
         products: productIds
             .map(productId => state.admin.Product.data[productId])
