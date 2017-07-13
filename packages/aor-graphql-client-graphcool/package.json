@@ -1,6 +1,6 @@
 {
   "name": "aor-graphql-client-graphcool",
-  "version": "0.0.1",
+  "version": "0.0.1-0",
   "description": "A Graphcool GraphQL client for admin-on-rest",
   "main": "./lib/index.js",
   "repository": "https://github.com/marmelab/aor-graphql-client-graphcool.git",
@@ -26,7 +26,7 @@
     ]
   },
   "devDependencies": {
-    "aor-graphql-client": "~0.0.1",
+    "aor-graphql-client": "^0.0.1-0",
     "babel-cli": "~6.24.1",
     "babel-core": "~6.24.1",
     "babel-eslint": "~7.2.3",
@@ -52,6 +52,6 @@
     "pluralize": "~4.0.0"
   },
   "peerDependencies": {
-    "aor-graphql-client": "~0.0.1"
+    "aor-graphql-client": "^0.0.1-0"
   }
 }
