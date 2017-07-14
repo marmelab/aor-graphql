@@ -4,27 +4,27 @@ import gql from 'graphql-tag';
 import { GET_LIST, GET_ONE, ALL_TYPES } from './constants';
 
 export const filterTypesByIncludeExclude = ({ include, exclude }) => {
-    if (include) {
-        if (Array.isArray(include)) {
-            return type => include.includes(type.name);
-        }
-
-        if (typeof include === 'function') {
-            return type => include(type);
-        }
+  if (include) {
+    if (Array.isArray(include)) {
+      return type => include.includes(type.name);
     }
 
-    if (exclude) {
-        if (Array.isArray(exclude)) {
-            return type => !exclude.includes(type.name);
-        }
+    if (typeof include === 'function') {
+      return type => include(type);
+    }
+  }
 
-        if (typeof exclude === 'function') {
-            return type => !exclude(type);
-        }
+  if (exclude) {
+    if (Array.isArray(exclude)) {
+      return type => !exclude.includes(type.name);
     }
 
-    return () => true;
+    if (typeof exclude === 'function') {
+      return type => !exclude(type);
+    }
+  }
+
+  return () => true;
 };
 
 /**
@@ -32,36 +32,48 @@ export const filterTypesByIncludeExclude = ({ include, exclude }) => {
  * @param {Object} options The introspection options
  */
 export default async (client, options) => {
-    const schema = await client.query({ query: gql`${introspectionQuery}` }).then(({ data: { __schema } }) => __schema);
+  const schema = options.schema
+    ? options.schema
+    : await client
+        .query({ query: gql`${introspectionQuery}` })
+        .then(({ data: { __schema } }) => __schema);
 
-    const queries = schema.types.reduce((acc, type) => {
-        if (type.name !== 'Query' && type.name !== 'Mutation') return acc;
+  const queries = schema.types.reduce((acc, type) => {
+    if (type.name !== 'Query' && type.name !== 'Mutation') return acc;
 
-        return [...acc, ...type.fields];
-    }, []);
+    return [...acc, ...type.fields];
+  }, []);
 
-    const types = schema.types.filter(type => type.name !== 'Query' && type.name !== 'Mutation');
+  const types = schema.types.filter(
+    type => type.name !== 'Query' && type.name !== 'Mutation'
+  );
 
-    const isResource = type =>
-        queries.some(query => query.name === options.operationNames[GET_LIST](type)) &&
-        queries.some(query => query.name === options.operationNames[GET_ONE](type));
+  const isResource = type =>
+    queries.some(
+      query => query.name === options.operationNames[GET_LIST](type)
+    ) &&
+    queries.some(query => query.name === options.operationNames[GET_ONE](type));
 
-    const buildResource = type =>
-        ALL_TYPES.reduce(
-            (acc, aorFetchType) => ({
-                ...acc,
-                [aorFetchType]: queries.find(query => query.name == options.operationNames[aorFetchType](type)),
-            }),
-            { type },
-        );
+  const buildResource = type =>
+    ALL_TYPES.reduce(
+      (acc, aorFetchType) => ({
+        ...acc,
+        [aorFetchType]: queries.find(
+          query => query.name == options.operationNames[aorFetchType](type)
+        ),
+      }),
+      { type }
+    );
 
-    const potentialResources = types.filter(isResource);
-    const filteredResources = potentialResources.filter(filterTypesByIncludeExclude(options));
-    const resources = filteredResources.map(buildResource);
+  const potentialResources = types.filter(isResource);
+  const filteredResources = potentialResources.filter(
+    filterTypesByIncludeExclude(options)
+  );
+  const resources = filteredResources.map(buildResource);
 
-    return {
-        types,
-        queries,
-        resources,
-    };
+  return {
+    types,
+    queries,
+    resources,
+  };
 };
