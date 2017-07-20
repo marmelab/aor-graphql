@@ -1,6 +1,6 @@
 {
   "name": "admin-on-rest-graphql-demo",
-  "version": "0.0.1-0",
+  "version": "0.0.1-1",
   "private": true,
   "devDependencies": {
     "babel-eslint": "~7.1.1",
@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "admin-on-rest": "~1.1.0",
-    "aor-graphql-client-graphcool": "^0.0.1-0",
+    "aor-graphql-client-graphcool": "^0.0.1-1",
     "aor-language-french": "~1.8.0",
     "aor-rich-text-input": "~1.0.0",
     "apollo-client": "~1.2.0",
