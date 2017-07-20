@@ -108,7 +108,7 @@ buildApolloClient({ client: myClient });
 
 ### IntrospectionOptions
 
-Instead of running an IntrospectionQuery you can also provide the IntrospectionQuery result directly. This speeds up the initial rendering of the `Admin` component.
+Instead of running an IntrospectionQuery you can also provide the IntrospectionQuery result directly. This speeds up the initial rendering of the `Admin` component as it no longer has to wait for the introspection query request to resolve.
 
 ```jsx
 import { __schema as schema } from './schema';
