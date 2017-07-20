@@ -108,7 +108,7 @@ buildApolloClient({ client: myClient });
 
 ### IntrospectionOptions
 
-Instead of running an IntrospectionQuery you can also provide the IntrospectionQuery result directly.
+Instead of running an IntrospectionQuery you can also provide the IntrospectionQuery result directly. This speeds up the initial rendering of the `Admin` component.
 
 ```jsx
 import { __schema as schema } from './schema';
@@ -124,6 +124,7 @@ buildApolloClient({
 
 The `./schema` file is a `schema.json` in `./scr` retrieved with [`get-graphql-schema --json <graphql_endpoint>`](https://github.com/graphcool/get-graphql-schema).
 
+> Note: Importing the `schema.json` file will significantly increase the bundle size.
 
 ## Specify your queries and mutations
 
