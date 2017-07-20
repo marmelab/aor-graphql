@@ -33,3 +33,6 @@ watch: ## build the packages
 	while kill -s 0 "$p1" || kill -s 0 "$p2"; do
 	wait "$p1"; wait "$p2"
 	done &>/dev/null
+
+deploy-demo:
+	@cd ./packages/admin-on-rest-graphql-demo && yarn deploy
