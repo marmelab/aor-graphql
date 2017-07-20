@@ -20,7 +20,9 @@ const sanitizeResource = (introspectionResults, resource) => data => {
         const linkedResource = introspectionResults.resources.find(r => r.type.name === type.name);
 
         if (linkedResource) {
-            if (Array.isArray(data[field.name])) {
+            const linkedResourceData = data[field.name];
+
+            if (Array.isArray(linkedResourceData)) {
                 return {
                     ...acc,
                     [field.name]: data[field.name].map(sanitizeResource(introspectionResults, linkedResource)),
@@ -30,8 +32,10 @@ const sanitizeResource = (introspectionResults, resource) => data => {
 
             return {
                 ...acc,
-                [`${field.name}.id`]: data[field.name].id,
-                [field.name]: sanitizeResource(introspectionResults, linkedResource)(data[field.name]),
+                [`${field.name}.id`]: linkedResourceData ? data[field.name].id : undefined,
+                [field.name]: linkedResourceData
+                    ? sanitizeResource(introspectionResults, linkedResource)(data[field.name])
+                    : undefined,
             };
         }
 

@@ -16,6 +16,10 @@ const testListTypes = type => {
                         name: 'author',
                         type: { kind: TypeKind.NON_NULL, ofType: { kind: TypeKind.OBJECT, name: 'User' } },
                     },
+                    {
+                        name: 'coauthor',
+                        type: { kind: TypeKind.OBJECT, name: 'User' },
+                    },
                 ],
             },
         };
@@ -51,6 +55,7 @@ const testListTypes = type => {
                         id: 'post1',
                         title: 'title1',
                         author: { id: 'author1', firstName: 'Toto' },
+                        coauthor: null,
                         tags: [{ id: 'tag1', name: 'tag1 name' }, { id: 'tag2', name: 'tag2 name' }],
                         embeddedJson: { foo: 'bar' },
                     },
@@ -59,6 +64,7 @@ const testListTypes = type => {
                         id: 'post2',
                         title: 'title2',
                         author: { id: 'author1', firstName: 'Toto' },
+                        coauthor: null,
                         tags: [{ id: 'tag1', name: 'tag1 name' }, { id: 'tag3', name: 'tag3 name' }],
                         embeddedJson: { foo: 'bar' },
                     },
@@ -66,6 +72,7 @@ const testListTypes = type => {
                 total: { count: 100 },
             },
         };
+
         expect(getResponseParser(introspectionResults)(type, resource)(response)).toEqual({
             data: [
                 {
@@ -106,6 +113,10 @@ const testSingleTypes = type => {
                         name: 'author',
                         type: { kind: TypeKind.NON_NULL, ofType: { kind: TypeKind.OBJECT, name: 'User' } },
                     },
+                    {
+                        name: 'coauthor',
+                        type: { kind: TypeKind.OBJECT, name: 'User' },
+                    },
                 ],
             },
         };
@@ -140,6 +151,7 @@ const testSingleTypes = type => {
                     id: 'post1',
                     title: 'title1',
                     author: { id: 'author1', firstName: 'Toto' },
+                    coauthor: null,
                     tags: [{ id: 'tag1', name: 'tag1 name' }, { id: 'tag2', name: 'tag2 name' }],
                     embeddedJson: { foo: 'bar' },
                 },
