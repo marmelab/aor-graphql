@@ -40,7 +40,7 @@ yarn add aor-graphql-client
 
 ## Usage
 
-```js
+```jsx
 // in App.js
 import React, { Component } from 'react';
 import buildApolloClient from 'aor-graphql-client';
@@ -106,6 +106,26 @@ You can also supply your own [ApolloClient](http://dev.apollodata.com/core/apoll
 buildApolloClient({ client: myClient });
 ```
 
+### IntrospectionOptions
+
+Instead of running an IntrospectionQuery you can also provide the IntrospectionQuery result directly. This speeds up the initial rendering of the `Admin` component as it no longer has to wait for the introspection query request to resolve.
+
+```jsx
+import { __schema as schema } from './schema';
+
+const introspectionOptions = {
+  schema
+};
+
+buildApolloClient({
+    introspection: introspectionOptions
+});
+```
+
+The `./schema` file is a `schema.json` in `./scr` retrieved with [`get-graphql-schema --json <graphql_endpoint>`](https://github.com/graphcool/get-graphql-schema).
+
+> Note: Importing the `schema.json` file will significantly increase the bundle size.
+
 ## Specify your queries and mutations
 
 For the client to know how to map Admin-on-rest request to apollo queries and mutations, you must provide a `queryBuilder` option. The `queryBuilder` is a factory function which will be called with the introspection query result.
@@ -125,8 +145,8 @@ For example:
             name: 'Post',
             kind: 'OBJECT',
             fields: [
-                { name: 'id', type: { kind: 'NON_NULL', ofType: { kind: 'SCALAR', name: 'ID } } },
-                { name: 'title', type: { kind: 'NON_NULL', ofType: { kind: 'SCALAR', name: 'String } } },
+                { name: 'id', type: { kind: 'NON_NULL', ofType: { kind: 'SCALAR', name: 'ID' } } },
+                { name: 'title', type: { kind: 'NON_NULL', ofType: { kind: 'SCALAR', name: 'String' } } },
                 ...
             ]
         },
@@ -136,7 +156,7 @@ For example:
         {
             name: 'createPost',
             args: [
-                { name: 'title', type: { kind: 'NON_NULL', ofType: { kind: 'SCALAR', name: 'String } } }
+                { name: 'title', type: { kind: 'NON_NULL', ofType: { kind: 'SCALAR', name: 'String' } } }
             ],
             type : { kind: 'OBJECT', name: 'Category' }
         },
@@ -148,15 +168,15 @@ For example:
                 name: 'Post',
                 kind: 'OBJECT',
                 fields: [
-                    { name: 'id', type: { kind: 'NON_NULL', ofType: { kind: 'SCALAR', name: 'ID } } },
-                    { name: 'title', type: { kind: 'NON_NULL', ofType: { kind: 'SCALAR', name: 'String } } },
+                    { name: 'id', type: { kind: 'NON_NULL', ofType: { kind: 'SCALAR', name: 'ID' } } },
+                    { name: 'title', type: { kind: 'NON_NULL', ofType: { kind: 'SCALAR', name: 'String' } } },
                     ...
                 ]
             },
             GET_LIST: {
                 name: 'createPost',
                 args: [
-                    { name: 'title', type: { kind: 'NON_NULL', ofType: { kind: 'SCALAR', name: 'String } } }
+                    { name: 'title', type: { kind: 'NON_NULL', ofType: { kind: 'SCALAR', name: 'String' } } }
                 ],
                 type : { kind: 'OBJECT', name: 'Category' }
             },
