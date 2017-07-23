@@ -4,6 +4,7 @@ help:
 	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 install: ## Install dependencies
+	@yarn
 	@./node_modules/.bin/lerna bootstrap
 
 test: ## Launch unit tests
@@ -36,3 +37,6 @@ watch: ## build the packages
 
 deploy-demo:
 	@cd ./packages/admin-on-rest-graphql-demo && yarn deploy
+
+publish:
+	@./node_modules/.bin/lerna publish
