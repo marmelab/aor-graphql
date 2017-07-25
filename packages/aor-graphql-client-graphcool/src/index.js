@@ -3,7 +3,7 @@ import buildClient from 'aor-graphql-client';
 import buildQuery from './buildQuery';
 
 const defaultOptions = {
-    queryBuilder: buildQuery,
+    buildQuery,
 };
 
 export default options => {

@@ -37,7 +37,7 @@ export default async options => {
         client: clientOptions,
         introspection,
         resolveIntrospection,
-        queryBuilder: queryBuilderFactory,
+        buildQuery: buildQueryFactory,
         override = {},
         ...otherOptions
     } = merge({}, defaultOptions, options);
@@ -51,17 +51,17 @@ export default async options => {
         introspectionResults = await resolveIntrospection(client, introspection);
     }
 
-    const queryBuilder = queryBuilderFactory(introspectionResults, otherOptions);
+    const buildQuery = buildQueryFactory(introspectionResults, otherOptions);
 
     const aorClient = (aorFetchType, resource, params) => {
-        const overridedQueryBuilder = get(override, `${resource}.${aorFetchType}`);
+        const overridedbuildQuery = get(override, `${resource}.${aorFetchType}`);
 
-        const { parseResponse, ...query } = overridedQueryBuilder
+        const { parseResponse, ...query } = overridedbuildQuery
             ? {
-                ...queryBuilder(aorFetchType, resource, params),
-                ...overridedQueryBuilder(params),
+                ...buildQuery(aorFetchType, resource, params),
+                ...overridedbuildQuery(params),
             }
-            : queryBuilder(aorFetchType, resource, params);
+            : buildQuery(aorFetchType, resource, params);
 
         if (QUERY_TYPES.includes(aorFetchType)) {
             const apolloQuery = {
@@ -82,7 +82,7 @@ export default async options => {
     };
 
     aorClient.observeRequest = (aorFetchType, resource, params) => {
-        const { parseResponse, ...query } = queryBuilder(aorFetchType, resource, params);
+        const { parseResponse, ...query } = buildQuery(aorFetchType, resource, params);
 
         const apolloQuery = {
             ...query,
