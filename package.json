@@ -11,6 +11,6 @@
     "babel-preset-react": "^6.24.1",
     "jest": "^20.0.4",
     "jest-babel": "^1.0.1",
-    "lerna": "~2.0.0-rc.5"
+    "lerna": "^2.0.0"
   }
 }
