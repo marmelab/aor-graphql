@@ -15,7 +15,7 @@ const styles = {
 const GridList = ({ ids, isLoading, data, currentSort, basePath, rowStyle }) => (
     <div style={styles.root}>
         <MuiGridList cellHeight={180} cols={4} style={styles.gridList}>
-            {ids.map((id) => (
+            {ids.map(id => (
                 <GridTile
                     key={id}
                     title={data[id].reference}
