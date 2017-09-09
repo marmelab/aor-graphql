@@ -27,7 +27,6 @@
   },
   "devDependencies": {
     "@types/jest": "~19.2.4",
-    "admin-on-rest": "~1.0.2",
     "babel-cli": "~6.24.1",
     "babel-core": "~6.24.1",
     "babel-eslint": "7.2.3",
@@ -50,10 +49,11 @@
     "babel-plugin-transform-runtime": "~6.23.0",
     "graphql": "~0.9.6",
     "graphql-tag": "~2.0.0",
+    "lodash.get": "^4.4.2",
     "lodash.merge": "~4.6.0",
     "pluralize": "~4.0.0"
   },
   "peerDependencies": {
-    "admin-on-rest": "~1.0.2"
+    "admin-on-rest": "~1.2.1"
   }
 }
