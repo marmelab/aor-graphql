@@ -3,10 +3,6 @@ aor-graphql
 
 This is a [lerna](https://lernajs.io/) project for working on packages related to using GraphQL with [Admin-on-rest](https://github.com/marmelab/admin-on-rest).
 
-This is very WIP. It currently requires changes on admin-on-rest which have not been published yet.
-
-Documentation is on its way.
-
 ## About this repository
 
 You'll find three packages in this repository:
@@ -23,7 +19,7 @@ You'll find three packages in this repository:
 - Provide an example implementation of a custom graphql *dialect*
 - Includes a custom saga for real time updates based on graphql subscriptions
 
-# Development
+## Development
 
 We included some make commands to ease common tasks:
 
@@ -32,7 +28,7 @@ We included some make commands to ease common tasks:
 `make watch`: will compile and watch changes on the aor-graphql-client and aor-graphql-client-graphcool packages
 `make run`: will starts the demo
 
-You should run both commands in separate terminals when playing with the source code.
+**Tip**: You should run both commands in separate terminals when playing with the source code.
 
 `make watch-test`: will run the tests in watch mode.
 `make test`: will run the tests once.

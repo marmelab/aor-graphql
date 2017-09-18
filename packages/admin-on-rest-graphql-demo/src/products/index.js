@@ -52,7 +52,7 @@ export const ProductList = props => (
 
 export const ProductCreate = props => (
     <Create {...props}>
-        <TabbedForm>
+        <TabbedForm redirect="list">
             <FormTab label="resources.Product.tabs.image">
                 <TextInput source="image" options={{ fullWidth: true }} validation={{ required: true }} />
                 <TextInput source="thumbnail" options={{ fullWidth: true }} validation={{ required: true }} />

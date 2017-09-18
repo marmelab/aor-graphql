@@ -1,4 +1,6 @@
 import gql from 'graphql-tag';
+import { invalidateFields, ROOT } from 'apollo-cache-invalidation';
+import { QUERY_TYPES } from 'aor-graphql-client/lib/constants';
 import buildVariables from './buildVariables';
 import buildGqlQuery from './buildGqlQuery';
 import getResponseParser from './getResponseParser';
@@ -31,7 +33,17 @@ export const buildQueryFactory = (
         const query = buildGqlQueryImpl(introspectionResults)(resource, aorFetchType, queryType, variables);
         const parseResponse = getResponseParserImpl(introspectionResults)(aorFetchType, resource, queryType);
 
-        return { query: gql`${query}`, variables, parseResponse };
+        let update = undefined;
+        if (!QUERY_TYPES.includes(aorFetchType)) {
+            const paths = QUERY_TYPES.filter(queryType => resource[queryType])
+                .map(queryType => resource[queryType].name)
+                .reduce((acc, queryName) => (acc.includes(queryName) ? acc : [...acc, queryName]), [])
+                .map(queryName => [ROOT, new RegExp(queryName)]);
+
+            update = invalidateFields(() => paths);
+        }
+
+        return { query: gql`${query}`, variables, parseResponse, update };
     };
 };
 

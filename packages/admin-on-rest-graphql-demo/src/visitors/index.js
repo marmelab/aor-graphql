@@ -43,9 +43,9 @@ const VisitorFilter = props => (
     </Filter>
 );
 
-const colored = WrappedComponent => props => props.record[props.source] > 500 ?
+const colored = WrappedComponent => props => (props.record[props.source] > 500 ?
     <span style={{ color: 'red' }}><WrappedComponent {...props} /></span> :
-    <WrappedComponent {...props} />;
+    <WrappedComponent {...props} />);
 
 const ColoredNumberField = colored(NumberField);
 ColoredNumberField.defaultProps = NumberField.defaultProps;
@@ -65,7 +65,7 @@ export const VisitorList = props => (
     </List>
 );
 
-const VisitorTitle = ({ record }) => record ? <FullNameField record={record} size={32} /> : null;
+const VisitorTitle = ({ record }) => (record ? <FullNameField record={record} size={32} /> : null);
 
 export const VisitorEdit = props => (
     <Edit title={<VisitorTitle />} {...props}>
@@ -115,10 +115,10 @@ export const VisitorEdit = props => (
     </Edit>
 );
 
-const VisitorDeleteTitle = translate(({ record, translate }) => <span>
+const VisitorDeleteTitle = translate(({ record, translate }) => (<span>
     {translate('resources.Customer.page.delete')}&nbsp;
-    {record && <img src={`${record.avatar}?size=25x25`} width="25" role="presentation" />}
+    {record && <img src={`${record.avatar}?size=25x25`} width="25" alt={`${record.firstName} ${record.lastName}`} />}
     {record && `${record.firstName} ${record.lastName}`}
-</span>);
+</span>));
 
 export const VisitorDelete = props => <Delete {...props} title={<VisitorDeleteTitle />} />;
