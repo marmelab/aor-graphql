@@ -20,10 +20,12 @@
   },
   "lint-staged": {
     "gitDir": "../../",
-    "./packages/aor-graphql-client-graphcool/src/**/*.js": [
-      "eslint --fix",
-      "git add"
-    ]
+    "linters": {
+      "./packages/aor-graphql-client-graphcool/src/**/*.js": [
+        "eslint --fix",
+        "git add"
+      ]
+    }
   },
   "devDependencies": {
     "aor-graphql-client": "^0.0.1-1",
