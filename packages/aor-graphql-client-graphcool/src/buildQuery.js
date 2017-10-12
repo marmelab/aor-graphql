@@ -15,7 +15,7 @@ export const buildQueryFactory = (
 
         if (!resource) {
             throw new Error(
-                `Unknown resource ${resource}. Make sure it has been declared on your server side schema. Known resources are ${knownResources.join(', ')}`,
+                `Unknown resource ${resourceName}. Make sure it has been declared on your server side schema. Known resources are ${knownResources.join(', ')}`,
             );
         }
 
