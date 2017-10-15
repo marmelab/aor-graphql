@@ -4,24 +4,20 @@ import gql from 'graphql-tag';
 import { GET_LIST, GET_ONE, ALL_TYPES } from './constants';
 
 export const filterTypesByIncludeExclude = ({ include, exclude }) => {
-    if (include) {
-        if (Array.isArray(include)) {
-            return type => include.includes(type.name);
-        }
-
-        if (typeof include === 'function') {
-            return type => include(type);
-        }
+    if (Array.isArray(include)) {
+        return type => include.includes(type.name);
     }
 
-    if (exclude) {
-        if (Array.isArray(exclude)) {
-            return type => !exclude.includes(type.name);
-        }
+    if (typeof include === 'function') {
+        return type => include(type);
+    }
 
-        if (typeof exclude === 'function') {
-            return type => !exclude(type);
-        }
+    if (Array.isArray(exclude)) {
+        return type => !exclude.includes(type.name);
+    }
+
+    if (typeof exclude === 'function') {
+        return type => !exclude(type);
     }
 
     return () => true;
