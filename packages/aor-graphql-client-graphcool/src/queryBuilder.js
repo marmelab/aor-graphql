@@ -215,7 +215,7 @@ export const buildVariables = introspectionResults => (resource, aorFetchType, p
 
             return {
                 skip: parseInt((params.pagination.page - 1) * params.pagination.perPage),
-                last: parseInt(params.pagination.perPage),
+                first: parseInt(params.pagination.perPage),
                 orderBy: `${params.sort.field}_${params.sort.order}`,
                 filter,
             };
