@@ -2,29 +2,13 @@
 # yarn lockfile v1
 
 
-"@types/async@^2.0.31":
-  version "2.0.40"
-  resolved "https://registry.yarnpkg.com/@types/async/-/async-2.0.40.tgz#ac02de68e66c004a61b7cb16df8b1db3a254cca9"
-
-"@types/graphql@^0.9.0":
-  version "0.9.1"
-  resolved "https://registry.yarnpkg.com/@types/graphql/-/graphql-0.9.1.tgz#b04ebe84bc997cc60dbea2ed4d0d4342c737f99d"
-
-"@types/graphql@^0.9.4":
-  version "0.9.4"
-  resolved "https://registry.yarnpkg.com/@types/graphql/-/graphql-0.9.4.tgz#cdeb6bcbef9b6c584374b81aa7f48ecf3da404fa"
-
-"@types/isomorphic-fetch@0.0.34":
-  version "0.0.34"
-  resolved "https://registry.yarnpkg.com/@types/isomorphic-fetch/-/isomorphic-fetch-0.0.34.tgz#3c3483e606c041378438e951464f00e4e60706d6"
+"@types/graphql@0.10.2":
+  version "0.10.2"
+  resolved "https://registry.yarnpkg.com/@types/graphql/-/graphql-0.10.2.tgz#d7c79acbaa17453b6681c80c34b38fcb10c4c08c"
 
 "@types/jest@~19.2.4":
   version "19.2.4"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-19.2.4.tgz#543651712535962b7dc615e18e4a381fc2687442"
-
-"@types/zen-observable@^0.5.1":
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/@types/zen-observable/-/zen-observable-0.5.2.tgz#d84e54a0e16d2b4404e0795ae493a39a3902bdd8"
 
 abab@^1.0.3:
   version "1.0.3"
@@ -58,32 +42,33 @@ acorn@^5.0.1:
   version "5.0.3"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.0.3.tgz#c460df08491463f028ccb82eab3730bf01087b3d"
 
-admin-on-rest@~1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/admin-on-rest/-/admin-on-rest-1.0.2.tgz#bc02126c33ef8347e7ad783521056d9f9edc4fc9"
+admin-on-rest@^1.3.2:
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/admin-on-rest/-/admin-on-rest-1.3.2.tgz#e320bf85ba55e9c62ff6c1283cb9a3a394277001"
   dependencies:
-    babel-runtime "~6.18.0"
+    babel-runtime "~6.26.0"
     inflection "~1.12.0"
     lodash.debounce "~4.0.8"
     lodash.defaultsdeep "~4.6.0"
     lodash.get "~4.4.2"
+    lodash.isequal "~4.5.0"
+    lodash.pickby "~4.6.0"
     lodash.set "~4.3.2"
-    material-ui "~0.17.4"
+    lodash.uniq "~4.5.0"
+    material-ui "~0.19.0"
+    material-ui-chip-input "~0.17.0"
     node-polyglot "2.2.2"
     prop-types "~15.5.7"
-    query-string "~4.3.2"
-    react "~15.5.4"
-    react-dom "~15.5.4"
-    react-dropzone "~3.13.1"
+    query-string "~5.0.0"
+    react-dropzone "~4.0.1"
     react-redux "~5.0.4"
     react-router "~4.1.0"
     react-router-dom "~4.1.0"
-    react-router-redux "~5.0.0-alpha.5"
-    react-tap-event-plugin "~2.0.1"
-    recompose "~0.23.1"
-    redux "~3.6.0"
-    redux-form "~6.6.3"
-    redux-saga "~0.14.6"
+    react-router-redux "~5.0.0-alpha.6"
+    recompose "~0.25.0"
+    redux "~3.7.2"
+    redux-form "~7.0.3"
+    redux-saga "~0.15.0"
     reselect "~3.0.0"
 
 ajv-keywords@^1.0.0:
@@ -134,7 +119,7 @@ anymatch@^1.3.0:
     arrify "^1.0.0"
     micromatch "^2.1.5"
 
-aor-realtime@~0.0.1:
+aor-realtime@^0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/aor-realtime/-/aor-realtime-0.0.1.tgz#22b137d478946a2dcadbc10c99694bbe9ddd93d4"
   dependencies:
@@ -147,11 +132,11 @@ aor-realtime@~0.0.1:
     react-router-redux "~5.0.0-alpha.5"
     redux-saga "~0.14.6"
 
-apollo-client@^1.9.0-1:
-  version "1.9.0-1"
-  resolved "https://registry.yarnpkg.com/apollo-client/-/apollo-client-1.9.0-1.tgz#4f5dccb95e0413b884af91b68552618be8a7411c"
+apollo-client@^1.9.3:
+  version "1.9.3"
+  resolved "https://registry.yarnpkg.com/apollo-client/-/apollo-client-1.9.3.tgz#37000b3c801f4571b7b089739e696a158896aeab"
   dependencies:
-    apollo-link "^0.0.3"
+    apollo-link-core "^0.5.0"
     graphql "^0.10.0"
     graphql-anywhere "^3.0.1"
     graphql-tag "^2.0.0"
@@ -159,27 +144,15 @@ apollo-client@^1.9.0-1:
     symbol-observable "^1.0.2"
     whatwg-fetch "^2.0.0"
   optionalDependencies:
-    "@types/async" "^2.0.31"
-    "@types/graphql" "^0.9.0"
-    "@types/isomorphic-fetch" "0.0.34"
+    "@types/graphql" "0.10.2"
 
-apollo-fetch@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/apollo-fetch/-/apollo-fetch-0.3.0.tgz#30a88346252e9bb4b969f93f3b23ecd748f84e68"
+apollo-link-core@^0.5.0:
+  version "0.5.4"
+  resolved "https://registry.yarnpkg.com/apollo-link-core/-/apollo-link-core-0.5.4.tgz#8efd4cd747959872a32f313f0ccfc2a76b396668"
   dependencies:
-    isomorphic-fetch "^2.2.1"
-
-apollo-link@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/apollo-link/-/apollo-link-0.0.3.tgz#9b02db8def792688e14f8be8b30f716f7789acb9"
-  dependencies:
-    apollo-fetch "^0.3.0"
     graphql "^0.10.3"
     graphql-tag "^2.4.2"
-    zen-observable "git+https://github.com/evanshauser/zen-observable.git"
-  optionalDependencies:
-    "@types/graphql" "^0.9.4"
-    "@types/zen-observable" "^0.5.1"
+    zen-observable-ts "^0.4.4"
 
 app-root-path@^2.0.0:
   version "2.0.1"
@@ -926,12 +899,12 @@ babel-runtime@^6.18.0, babel-runtime@^6.20.0, babel-runtime@^6.22.0, babel-runti
     core-js "^2.4.0"
     regenerator-runtime "^0.10.0"
 
-babel-runtime@~6.18.0:
-  version "6.18.0"
-  resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.18.0.tgz#0f4177ffd98492ef13b9f823e9994a02584c9078"
+babel-runtime@~6.26.0:
+  version "6.26.0"
+  resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.26.0.tgz#965c7058668e82b55d7bfe04ff2337bc8b5647fe"
   dependencies:
     core-js "^2.4.0"
-    regenerator-runtime "^0.9.5"
+    regenerator-runtime "^0.11.0"
 
 babel-template@^6.16.0, babel-template@^6.24.1:
   version "6.25.0"
@@ -1243,6 +1216,14 @@ create-react-class@^15.5.3:
     loose-envify "^1.3.1"
     object-assign "^4.1.1"
 
+create-react-class@^15.6.0:
+  version "15.6.2"
+  resolved "https://registry.yarnpkg.com/create-react-class/-/create-react-class-15.6.2.tgz#cf1ed15f12aad7f14ef5f2dfe05e6c42f91ef02a"
+  dependencies:
+    fbjs "^0.8.9"
+    loose-envify "^1.3.1"
+    object-assign "^4.1.1"
+
 cross-spawn@^5.0.1:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-5.1.0.tgz#e8bd0efee58fcff6f8f94510a0a554bbfa235449"
@@ -1304,6 +1285,10 @@ debug@^2.1.1, debug@^2.2.0, debug@^2.6.3:
 decamelize@^1.0.0, decamelize@^1.1.1:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/decamelize/-/decamelize-1.2.0.tgz#f6534d15148269b20352e7bee26f501f9a191290"
+
+decode-uri-component@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.0.tgz#eb3913333458775cb84cd1a1fae062106bb87545"
 
 deep-equal@^1.0.1:
   version "1.0.1"
@@ -1700,9 +1685,21 @@ fb-watchman@^2.0.0:
   dependencies:
     bser "^2.0.0"
 
-fbjs@^0.8.1, fbjs@^0.8.4, fbjs@^0.8.6, fbjs@^0.8.9:
+fbjs@^0.8.1, fbjs@^0.8.4, fbjs@^0.8.9:
   version "0.8.12"
   resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.12.tgz#10b5d92f76d45575fd63a217d4ea02bea2f8ed04"
+  dependencies:
+    core-js "^1.0.0"
+    isomorphic-fetch "^2.1.1"
+    loose-envify "^1.0.0"
+    object-assign "^4.1.0"
+    promise "^7.1.1"
+    setimmediate "^1.0.5"
+    ua-parser-js "^0.7.9"
+
+fbjs@^0.8.16:
+  version "0.8.16"
+  resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.16.tgz#5e67432f550dc41b572bf55847b8aca64e5337db"
   dependencies:
     core-js "^1.0.0"
     isomorphic-fetch "^2.1.1"
@@ -1948,7 +1945,7 @@ graphql-anywhere@^3.0.1:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-3.1.0.tgz#3ea0d8e8646b5cee68035016a9a7557c15c21e96"
 
-graphql-tag@^2.0.0, graphql-tag@~2.0.0:
+graphql-tag@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/graphql-tag/-/graphql-tag-2.0.0.tgz#f3efe3b4d64f33bfe8479ae06a461c9d72f2a6fe"
 
@@ -1962,11 +1959,11 @@ graphql@^0.10.0, graphql@^0.10.3:
   dependencies:
     iterall "^1.1.0"
 
-graphql@~0.9.6:
-  version "0.9.6"
-  resolved "https://registry.yarnpkg.com/graphql/-/graphql-0.9.6.tgz#514421e9d225c29dfc8fd305459abae58815ef2c"
+graphql@^0.11.7:
+  version "0.11.7"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-0.11.7.tgz#e5abaa9cb7b7cccb84e9f0836bf4370d268750c6"
   dependencies:
-    iterall "^1.0.0"
+    iterall "1.1.3"
 
 growly@^1.3.0:
   version "1.3.0"
@@ -2039,6 +2036,10 @@ hoek@2.x.x:
 hoist-non-react-statics@^1.0.0, hoist-non-react-statics@^1.0.3, hoist-non-react-statics@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-1.2.0.tgz#aa448cf0986d55cc40773b17174b7dd066cb7cfb"
+
+hoist-non-react-statics@^2.2.1, hoist-non-react-statics@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-2.3.1.tgz#343db84c6018c650778898240135a1420ee22ce0"
 
 home-or-tmp@^2.0.0:
   version "2.0.0"
@@ -2335,7 +2336,7 @@ isobject@^2.0.0:
   dependencies:
     isarray "1.0.0"
 
-isomorphic-fetch@^2.1.1, isomorphic-fetch@^2.2.1:
+isomorphic-fetch@^2.1.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/isomorphic-fetch/-/isomorphic-fetch-2.2.1.tgz#611ae1acf14f5e81f729507472819fe9733558a9"
   dependencies:
@@ -2409,7 +2410,11 @@ istanbul-reports@^1.1.1:
   dependencies:
     handlebars "^4.0.3"
 
-iterall@^1.0.0, iterall@^1.1.0:
+iterall@1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/iterall/-/iterall-1.1.3.tgz#1cbbff96204056dde6656e2ed2e2226d0e6d72c9"
+
+iterall@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/iterall/-/iterall-1.1.1.tgz#f7f0af11e9a04ec6426260f5019d9fcca4d50214"
 
@@ -2855,6 +2860,10 @@ lodash.get@~4.4.2:
   version "4.4.2"
   resolved "https://registry.yarnpkg.com/lodash.get/-/lodash.get-4.4.2.tgz#2d177f652fa31e939b4438d5341499dfa3825e99"
 
+lodash.isequal@~4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
+
 lodash.merge@^4.6.0, lodash.merge@~4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.0.tgz#69884ba144ac33fe699737a6086deffadd0f89c5"
@@ -2878,6 +2887,10 @@ lodash.set@~4.3.2:
 lodash.throttle@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
+
+lodash.uniq@~4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
 
 lodash@^4.0.0, lodash@^4.14.0, lodash@^4.17.3, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0:
   version "4.17.4"
@@ -2919,9 +2932,15 @@ makeerror@1.0.x:
   dependencies:
     tmpl "1.0.x"
 
-material-ui@~0.17.4:
-  version "0.17.4"
-  resolved "https://registry.yarnpkg.com/material-ui/-/material-ui-0.17.4.tgz#193999ecb49c3ec15ae0abb4e90fdf9a7bd343e0"
+material-ui-chip-input@~0.17.0:
+  version "0.17.2"
+  resolved "https://registry.yarnpkg.com/material-ui-chip-input/-/material-ui-chip-input-0.17.2.tgz#4d1c065cad8d9b96ad6b0b3d3fa916fc27b66da8"
+  dependencies:
+    prop-types "^15.5.7"
+
+material-ui@~0.19.0:
+  version "0.19.3"
+  resolved "https://registry.yarnpkg.com/material-ui/-/material-ui-0.19.3.tgz#34b96401499773bc0b1ebf923b293bbf1632d375"
   dependencies:
     babel-runtime "^6.23.0"
     inline-style-prefixer "^3.0.2"
@@ -2929,10 +2948,9 @@ material-ui@~0.17.4:
     lodash.merge "^4.6.0"
     lodash.throttle "^4.1.1"
     prop-types "^15.5.7"
-    react-addons-create-fragment "^15.4.0"
-    react-addons-transition-group "^15.4.0"
     react-event-listener "^0.4.5"
-    recompose "^0.23.0"
+    react-transition-group "^1.1.2"
+    recompose "0.24.0"
     simple-assign "^0.1.0"
     warning "^3.0.0"
 
@@ -3310,9 +3328,9 @@ pluralize@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-1.2.1.tgz#d1a21483fd22bb41e58a12fa3421823140897c45"
 
-pluralize@~4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-4.0.0.tgz#59b708c1c0190a2f692f1c7618c446b052fd1762"
+pluralize@~7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-7.0.0.tgz#298b89df8b93b0221dbf421ad2b1b1ea23fc6777"
 
 prelude-ls@~1.1.2:
   version "1.1.2"
@@ -3375,6 +3393,14 @@ prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.5.7,
     fbjs "^0.8.9"
     loose-envify "^1.3.1"
 
+prop-types@^15.5.9:
+  version "15.6.0"
+  resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.0.tgz#ceaf083022fc46b4a35f69e13ef75aed0d639856"
+  dependencies:
+    fbjs "^0.8.16"
+    loose-envify "^1.3.1"
+    object-assign "^4.1.1"
+
 prr@~0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/prr/-/prr-0.0.0.tgz#1a84b85908325501411853d0081ee3fa86e2926a"
@@ -3391,10 +3417,11 @@ qs@~6.4.0:
   version "6.4.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.4.0.tgz#13e26d28ad6b0ffaa91312cd3bf708ed351e7233"
 
-query-string@~4.3.2:
-  version "4.3.4"
-  resolved "https://registry.yarnpkg.com/query-string/-/query-string-4.3.4.tgz#bbb693b9ca915c232515b228b1a02b609043dbeb"
+query-string@~5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/query-string/-/query-string-5.0.0.tgz#fbdf7004b4d2aff792f9871981b7a2794f555947"
   dependencies:
+    decode-uri-component "^0.2.0"
     object-assign "^4.1.0"
     strict-uri-encode "^1.0.0"
 
@@ -3414,32 +3441,18 @@ rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-addons-create-fragment@^15.4.0:
-  version "15.6.0"
-  resolved "https://registry.yarnpkg.com/react-addons-create-fragment/-/react-addons-create-fragment-15.6.0.tgz#af91a22b1fb095dd01f1afba43bfd0ef589d8b20"
-  dependencies:
-    fbjs "^0.8.4"
-    loose-envify "^1.3.1"
-    object-assign "^4.1.0"
-
-react-addons-transition-group@^15.4.0:
-  version "15.6.0"
-  resolved "https://registry.yarnpkg.com/react-addons-transition-group/-/react-addons-transition-group-15.6.0.tgz#0f220b9f9597db3a80a88dbd6fe805fc644ce21c"
-  dependencies:
-    react-transition-group "^1.2.0"
-
-react-dom@~15.5.4:
-  version "15.5.4"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.5.4.tgz#ba0c28786fd52ed7e4f2135fe0288d462aef93da"
+react-dom@^15.5.4:
+  version "15.6.2"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.6.2.tgz#41cfadf693b757faf2708443a1d1fd5a02bef730"
   dependencies:
     fbjs "^0.8.9"
     loose-envify "^1.1.0"
     object-assign "^4.1.0"
-    prop-types "~15.5.7"
+    prop-types "^15.5.10"
 
-react-dropzone@~3.13.1:
-  version "3.13.2"
-  resolved "https://registry.yarnpkg.com/react-dropzone/-/react-dropzone-3.13.2.tgz#318745c03007ca6b948cdd4431abc009b16a6588"
+react-dropzone@~4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/react-dropzone/-/react-dropzone-4.0.1.tgz#4d71d6f0fc5d7ac8a50dfa46582c96fe35ae3ca4"
   dependencies:
     attr-accept "^1.0.3"
     prop-types "^15.5.7"
@@ -3474,7 +3487,7 @@ react-router-dom@~4.1.0:
     prop-types "^15.5.4"
     react-router "^4.1.1"
 
-react-router-redux@~5.0.0-alpha.5:
+react-router-redux@~5.0.0-alpha.5, react-router-redux@~5.0.0-alpha.6:
   version "5.0.0-alpha.6"
   resolved "https://registry.yarnpkg.com/react-router-redux/-/react-router-redux-5.0.0-alpha.6.tgz#7418663c2ecd3c51be856fcf28f3d1deecc1a576"
   dependencies:
@@ -3494,15 +3507,9 @@ react-router@^4.1.1, react-router@~4.1.0, react-router@~4.1.1:
     prop-types "^15.5.4"
     warning "^3.0.0"
 
-react-tap-event-plugin@~2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/react-tap-event-plugin/-/react-tap-event-plugin-2.0.1.tgz#316beb3bc6556e29ec869a7293e89c826a9074d2"
-  dependencies:
-    fbjs "^0.8.6"
-
-react-transition-group@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-1.2.0.tgz#b51fc921b0c3835a7ef7c571c79fc82c73e9204f"
+react-transition-group@^1.1.2:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-1.2.1.tgz#e11f72b257f921b213229a774df46612346c7ca6"
   dependencies:
     chain-function "^1.0.0"
     dom-helpers "^3.2.0"
@@ -3510,14 +3517,15 @@ react-transition-group@^1.2.0:
     prop-types "^15.5.6"
     warning "^3.0.0"
 
-react@~15.5.4:
-  version "15.5.4"
-  resolved "https://registry.yarnpkg.com/react/-/react-15.5.4.tgz#fa83eb01506ab237cdc1c8c3b1cea8de012bf047"
+react@^15.5.4:
+  version "15.6.2"
+  resolved "https://registry.yarnpkg.com/react/-/react-15.6.2.tgz#dba0434ab439cfe82f108f0f511663908179aa72"
   dependencies:
+    create-react-class "^15.6.0"
     fbjs "^0.8.9"
     loose-envify "^1.1.0"
     object-assign "^4.1.0"
-    prop-types "^15.5.7"
+    prop-types "^15.5.10"
 
 read-pkg-up@^1.0.1:
   version "1.0.1"
@@ -3569,33 +3577,46 @@ rechoir@^0.6.2:
   dependencies:
     resolve "^1.1.6"
 
-recompose@^0.23.0, recompose@~0.23.1:
-  version "0.23.5"
-  resolved "https://registry.yarnpkg.com/recompose/-/recompose-0.23.5.tgz#72ac8261246bec378235d187467d02a721e8b1de"
+recompose@0.24.0:
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/recompose/-/recompose-0.24.0.tgz#262e93f974439eb17e7779824d88cce90492a5dd"
   dependencies:
     change-emitter "^0.1.2"
     fbjs "^0.8.1"
     hoist-non-react-statics "^1.0.0"
     symbol-observable "^1.0.4"
 
-redux-form@~6.6.3:
-  version "6.6.3"
-  resolved "https://registry.yarnpkg.com/redux-form/-/redux-form-6.6.3.tgz#62362654f2214c83a8f9fcb8313702bb46f92205"
+recompose@~0.25.0:
+  version "0.25.1"
+  resolved "https://registry.yarnpkg.com/recompose/-/recompose-0.25.1.tgz#5eb9d6cf6e25a9ffad73cbbae5658b5b55d6e728"
+  dependencies:
+    change-emitter "^0.1.2"
+    fbjs "^0.8.1"
+    hoist-non-react-statics "^2.3.1"
+    symbol-observable "^1.0.4"
+
+redux-form@~7.0.3:
+  version "7.0.4"
+  resolved "https://registry.yarnpkg.com/redux-form/-/redux-form-7.0.4.tgz#2297b6bed40fda8bb58132e261ba0976fb4e530c"
   dependencies:
     deep-equal "^1.0.1"
     es6-error "^4.0.0"
-    hoist-non-react-statics "^1.2.0"
+    hoist-non-react-statics "^2.2.1"
     invariant "^2.2.2"
     is-promise "^2.1.0"
     lodash "^4.17.3"
     lodash-es "^4.17.3"
-    prop-types "^15.5.6"
+    prop-types "^15.5.9"
 
 redux-saga@~0.14.6:
   version "0.14.8"
   resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-0.14.8.tgz#ad01afabe02ec41a17df54e2e09aa236b30a7732"
 
-redux@^3.4.0, redux@~3.6.0:
+redux-saga@~0.15.0:
+  version "0.15.6"
+  resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-0.15.6.tgz#8638dc522de6c6c0a496fe8b2b5466287ac2dc4d"
+
+redux@^3.4.0:
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/redux/-/redux-3.6.0.tgz#887c2b3d0b9bd86eca2be70571c27654c19e188d"
   dependencies:
@@ -3603,6 +3624,15 @@ redux@^3.4.0, redux@~3.6.0:
     lodash-es "^4.2.1"
     loose-envify "^1.1.0"
     symbol-observable "^1.0.2"
+
+redux@~3.7.2:
+  version "3.7.2"
+  resolved "https://registry.yarnpkg.com/redux/-/redux-3.7.2.tgz#06b73123215901d25d065be342eb026bc1c8537b"
+  dependencies:
+    lodash "^4.2.1"
+    lodash-es "^4.2.1"
+    loose-envify "^1.1.0"
+    symbol-observable "^1.0.3"
 
 regenerate@^1.2.1:
   version "1.3.2"
@@ -3612,9 +3642,9 @@ regenerator-runtime@^0.10.0:
   version "0.10.5"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.10.5.tgz#336c3efc1220adcedda2c9fab67b5a7955a33658"
 
-regenerator-runtime@^0.9.5:
-  version "0.9.6"
-  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.9.6.tgz#d33eb95d0d2001a4be39659707c51b0cb71ce029"
+regenerator-runtime@^0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.11.0.tgz#7e54fe5b5ccd5d6624ea6255c3473be090b802e1"
 
 regenerator-transform@0.9.11:
   version "0.9.11"
@@ -3997,7 +4027,7 @@ supports-color@^3.1.2:
   dependencies:
     has-flag "^1.0.0"
 
-symbol-observable@^1.0.1, symbol-observable@^1.0.2, symbol-observable@^1.0.4:
+symbol-observable@^1.0.1, symbol-observable@^1.0.2, symbol-observable@^1.0.3, symbol-observable@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.0.4.tgz#29bf615d4aa7121bdd898b22d4b3f9bc4e2aa03d"
 
@@ -4313,6 +4343,6 @@ yargs@~3.10.0:
     decamelize "^1.0.0"
     window-size "0.1.0"
 
-"zen-observable@git+https://github.com/evanshauser/zen-observable.git":
-  version "0.5.2"
-  resolved "git+https://github.com/evanshauser/zen-observable.git#a11ee4bd848f381898b6cd93c769eb1dcc0febf6"
+zen-observable-ts@^0.4.4:
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/zen-observable-ts/-/zen-observable-ts-0.4.4.tgz#c244c71eaebef79a985ccf9895bc90307a6e9712"

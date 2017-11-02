@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@types/jest": "~19.2.4",
-    "admin-on-rest": "~1.0.2",
+    "admin-on-rest": "^1.3.2",
     "babel-cli": "~6.24.1",
     "babel-core": "~6.24.1",
     "babel-eslint": "7.2.3",
@@ -42,18 +42,23 @@
     "husky": "~0.13.3",
     "jest": "~20.0.4",
     "lint-staged": "~3.4.1",
-    "prettier": "~1.3.1"
+    "prettier": "~1.3.1",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4"
   },
   "dependencies": {
-    "aor-realtime": "~0.0.1",
-    "apollo-client": "^1.9.0-1",
+    "aor-realtime": "^0.0.1",
+    "apollo-client": "^1.9.3",
     "babel-plugin-transform-runtime": "~6.23.0",
-    "graphql": "~0.9.6",
-    "graphql-tag": "~2.0.0",
+    "graphql": "^0.11.7",
+    "graphql-tag": "^2.4.2",
+    "lodash.get": "~4.4.2",
     "lodash.merge": "~4.6.0",
-    "pluralize": "~4.0.0"
+    "pluralize": "~7.0.0"
   },
   "peerDependencies": {
-    "admin-on-rest": "~1.0.2"
+    "admin-on-rest": "^1.3.2",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4"
   }
 }

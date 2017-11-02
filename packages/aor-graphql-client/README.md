@@ -219,6 +219,14 @@ const queryBuilder = introspectionResults => (aorFetchType, resourceName, params
 buildApolloClient({ queryBuilder });
 ```
 
+## Troubleshooting
+
+*When I create or edit a resource, the list or edit page does not refresh its data*
+
+`admin-on-rest` maintain its own cache of resources data but, by default, so does the Apollo client. For every queries, we inject a default [`fetchPolicy`](http://dev.apollodata.com/react/api-queries.html#graphql-config-options-fetchPolicy) set to `network-only` so that the Apollo client always refetch the data when requested.
+
+Do not override this `fetchPolicy`.
+
 ## Contributing
 
 Run the tests with this command:

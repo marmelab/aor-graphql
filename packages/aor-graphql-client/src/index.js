@@ -42,9 +42,8 @@ export default async options => {
         ...otherOptions
     } = merge({}, defaultOptions, options);
 
-    const client = clientOptions && clientOptions instanceof ApolloClient
-        ? clientOptions
-        : buildApolloClient(clientOptions);
+    const client =
+        clientOptions && clientOptions instanceof ApolloClient ? clientOptions : buildApolloClient(clientOptions);
 
     let introspectionResults;
     if (introspection) {
@@ -58,14 +57,15 @@ export default async options => {
 
         const { parseResponse, ...query } = overridedbuildQuery
             ? {
-                ...buildQuery(aorFetchType, resource, params),
-                ...overridedbuildQuery(params),
-            }
+                  ...buildQuery(aorFetchType, resource, params),
+                  ...overridedbuildQuery(params),
+              }
             : buildQuery(aorFetchType, resource, params);
 
         if (QUERY_TYPES.includes(aorFetchType)) {
             const apolloQuery = {
                 ...query,
+                fetchPolicy: 'network-only',
                 ...getOptions(otherOptions.query, aorFetchType, resource),
             };
 
