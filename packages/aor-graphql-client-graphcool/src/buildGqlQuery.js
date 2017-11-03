@@ -46,7 +46,7 @@ export const buildArgs = (query, variables) => {
         return {};
     }
 
-    const validVariables = Object.keys(variables).filter(k => !!variables[k] && variables[k] !== null);
+    const validVariables = Object.keys(variables).filter(k => typeof variables[k] !== 'undefined');
     let args = query.args
         .filter(a => validVariables.includes(a.name))
         .reduce((acc, arg) => ({ ...acc, [`${arg.name}`]: `$${arg.name}` }), {});
@@ -59,15 +59,11 @@ export const buildApolloArgs = (query, variables) => {
         return {};
     }
 
-    const validVariables = Object.keys(variables).filter(k => !!variables[k] && variables[k] !== null);
+    const validVariables = Object.keys(variables).filter(k => typeof variables[k] !== 'undefined');
 
     let args = query.args.filter(a => validVariables.includes(a.name)).reduce((acc, arg) => {
         if (arg.name.endsWith('Ids')) {
             return { ...acc, [`$${arg.name}`]: '[ID!]!' };
-        }
-
-        if (arg.name.endsWith('Id')) {
-            return { ...acc, [`$${arg.name}`]: 'ID!' };
         }
 
         return { ...acc, [`$${arg.name}`]: getArgType(arg) };
