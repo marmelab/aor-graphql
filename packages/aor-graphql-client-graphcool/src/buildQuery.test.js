@@ -14,7 +14,7 @@ describe('buildQuery', () => {
 
     it('throws an error if resource is unknown', () => {
         expect(() => buildQueryFactory()(introspectionResults)('GET_LIST', 'Comment')).toThrow(
-            'Unknown resource undefined. Make sure it has been declared on your server side schema. Known resources are Post',
+            'Unknown resource Comment. Make sure it has been declared on your server side schema. Known resources are Post',
         );
     });
 
