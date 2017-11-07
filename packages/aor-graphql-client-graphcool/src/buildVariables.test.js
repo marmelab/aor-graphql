@@ -33,7 +33,7 @@ describe('buildVariables', () => {
                     author: { id: 'author1' },
                     views: 100,
                 },
-                last: 10,
+                first: 10,
                 orderBy: 'sortField_DESC',
                 skip: 90,
             });
