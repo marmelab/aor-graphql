@@ -1,0 +1,96 @@
+type Category @model {
+  createdAt: DateTime!
+  id: ID! @isUnique
+  name: String! @isUnique
+  products: [Product!]! @relation(name: "ProductOnCategory")
+  updatedAt: DateTime!
+}
+
+type Command @model {
+  basket: [CommandItem!]! @relation(name: "CommandItemOnCommand")
+  createdAt: DateTime!
+  date: DateTime!
+  deliveryFees: Float!
+  id: ID! @isUnique
+  reference: String!
+  returned: Boolean!
+  status: String!
+  taxRate: Float!
+  taxes: Float!
+  total: Float!
+  totalExTaxes: Float!
+  updatedAt: DateTime!
+  customer: Customer @relation(name: "CommandOnCustomer")
+  reviews: [Review!]! @relation(name: "ReviewOnCommand")
+}
+
+type CommandItem @model {
+  command: Command @relation(name: "CommandItemOnCommand")
+  createdAt: DateTime!
+  id: ID! @isUnique
+  quantity: Int
+  updatedAt: DateTime!
+  product: Product @relation(name: "CommandItemOnProduct")
+}
+
+type Segment @model {
+  createdAt: DateTime!
+  id: ID! @isUnique
+  name: String! @isUnique
+  updatedAt: DateTime!
+  customers: [Customer!]! @relation(name: "CustomerOnGroup")
+}
+
+type Customer @model {
+  address: String
+  avatar: String
+  birthday: DateTime
+  city: String
+  createdAt: DateTime!
+  email: String
+  firstName: String
+  firstSeen: DateTime
+  hasNewsletter: Boolean
+  hasOrdered: Boolean
+  id: ID! @isUnique
+  lastName: String
+  lastSeen: DateTime
+  latestPurchase: DateTime
+  nbCommands: Int
+  totalSpent: Float
+  updatedAt: DateTime!
+  zipcode: String
+  groups: [Segment!]! @relation(name: "CustomerOnGroup")
+  reviews: [Review!]! @relation(name: "ReviewOnCustomer")
+  commands: [Command!]! @relation(name: "CommandOnCustomer")
+}
+
+type Product @model {
+  category: Category! @relation(name: "ProductOnCategory")
+  createdAt: DateTime!
+  description: String!
+  height: Float!
+  id: ID! @isUnique
+  image: String!
+  price: Float!
+  reference: String!
+  stock: Int!
+  thumbnail: String!
+  updatedAt: DateTime!
+  width: Float!
+  commandItems: [CommandItem!]! @relation(name: "CommandItemOnProduct")
+  reviews: [Review!]! @relation(name: "ReviewOnProduct")
+}
+
+type Review @model {
+  comment: String
+  createdAt: DateTime!
+  date: DateTime
+  id: ID! @isUnique
+  rating: Int
+  status: String
+  updatedAt: DateTime!
+  customer: Customer @relation(name: "ReviewOnCustomer")
+  product: Product @relation(name: "ReviewOnProduct")
+  command: Command @relation(name: "ReviewOnCommand")
+}
