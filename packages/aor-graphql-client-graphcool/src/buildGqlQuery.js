@@ -3,6 +3,8 @@ import { TypeKind } from 'graphql';
 
 import { encodeQuery, encodeMutation } from './graphqlify';
 import getFinalType from './getFinalType';
+import isList from './isList';
+import isRequired from './isRequired';
 
 export const buildFields = introspectionResults => fields =>
     fields.reduce((acc, field) => {
@@ -34,11 +36,11 @@ export const buildFields = introspectionResults => fields =>
     }, {});
 
 export const getArgType = arg => {
-    if (arg.type.kind === TypeKind.NON_NULL) {
-        return `${arg.type.ofType.name}!`;
-    }
+    const type = getFinalType(arg.type);
+    const required = isRequired(arg.type);
+    const list = isList(arg.type);
 
-    return arg.type.name;
+    return `${list ? '[' : ''}${type.name}${list ? '!]' : ''}${required ? '!' : ''}`;
 };
 
 export const buildArgs = (query, variables) => {
@@ -46,7 +48,7 @@ export const buildArgs = (query, variables) => {
         return {};
     }
 
-    const validVariables = Object.keys(variables).filter(k => !!variables[k] && variables[k] !== null);
+    const validVariables = Object.keys(variables).filter(k => typeof variables[k] !== 'undefined');
     let args = query.args
         .filter(a => validVariables.includes(a.name))
         .reduce((acc, arg) => ({ ...acc, [`${arg.name}`]: `$${arg.name}` }), {});
@@ -59,17 +61,9 @@ export const buildApolloArgs = (query, variables) => {
         return {};
     }
 
-    const validVariables = Object.keys(variables).filter(k => !!variables[k] && variables[k] !== null);
+    const validVariables = Object.keys(variables).filter(k => typeof variables[k] !== 'undefined');
 
     let args = query.args.filter(a => validVariables.includes(a.name)).reduce((acc, arg) => {
-        if (arg.name.endsWith('Ids')) {
-            return { ...acc, [`$${arg.name}`]: '[ID!]!' };
-        }
-
-        if (arg.name.endsWith('Id')) {
-            return { ...acc, [`$${arg.name}`]: 'ID!' };
-        }
-
         return { ...acc, [`$${arg.name}`]: getArgType(arg) };
     }, {});
 

@@ -37,18 +37,21 @@ describe('buildApolloArgs', () => {
                         },
                         {
                             name: 'barId',
-                            type: { kind: TypeKind.SCALAR },
+                            type: { kind: TypeKind.SCALAR, name: 'ID' },
                         },
                         {
                             name: 'barIds',
-                            type: { kind: TypeKind.SCALAR },
+                            type: {
+                                kind: TypeKind.LIST,
+                                ofType: { kind: TypeKind.NON_NULL, ofType: { kind: TypeKind.SCALAR, name: 'ID' } },
+                            },
                         },
                         { name: 'bar' },
                     ],
                 },
                 { foo: 'foo_value', barId: 100, barIds: [101, 102] },
             ),
-        ).toEqual({ $foo: 'Int!', $barId: 'ID!', $barIds: '[ID!]!' });
+        ).toEqual({ $foo: 'Int!', $barId: 'ID', $barIds: '[ID!]!' });
     });
 });
 
