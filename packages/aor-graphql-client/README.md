@@ -90,7 +90,7 @@ You can specify the client options by calling `buildApolloClient` like this:
 import { createNetworkInterface } from 'react-apollo';
 
 buildApolloClient({
-    client: {
+    clientOptions: {
         networkInterface: createNetworkInterface({
             uri: 'http://api.myproduct.com/graphql',
         }),
