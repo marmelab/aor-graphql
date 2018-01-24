@@ -43,7 +43,7 @@ export default async options => {
         ...otherOptions
     } = merge({}, defaultOptions, options);
 
-    const client = clientObject && buildApolloClient(clientOptions);
+    const client = clientObject || buildApolloClient(clientOptions);
 
     let introspectionResults;
     if (introspection) {
