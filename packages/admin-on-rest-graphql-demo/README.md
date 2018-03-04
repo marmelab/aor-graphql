@@ -2,7 +2,7 @@
 
 This is a demo of the [admin-on-rest](https://github.com/marmelab/admin-on-rest) library for React.js. It creates a working administration for a fake poster shop named Posters Galore. You can test it online at http://marmelab.com/admin-on-rest-graphql-demo.
 
-Admin-on-rest usually requires a REST server to provide data. In this demo however, a GraphQL endoint is simulated by the browser (using [apollographql/graphql-tools](https://github.com/apollographql/graphql-tools)). You can see the source data in [public/data.js](https://github.com/marmelab/admin-on-rest-graphql-demo/tree/master/public/data.js).
+Admin-on-rest usually requires a REST server to provide data. In this demo however, a GraphQL endoint is simulated by the browser (using [apollographql/graphql-tools](https://github.com/apollographql/graphql-tools)). You can see the source data in [bin/data.js](https://github.com/marmelab/aor-graphql/blob/master/packages/admin-on-rest-graphql-demo/bin/data.js).
 
 To explore the source code, start with [src/index.js](https://github.com/marmelab/admin-on-rest-graphql-demo/blob/master/src/index.js).
 
