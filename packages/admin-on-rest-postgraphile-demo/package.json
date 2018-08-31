@@ -1,0 +1,33 @@
+{
+  "name": "admin-on-rest-postgraphile-demo",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "admin-on-rest": "^1.4.1",
+    "aor-graphql-client": "^0.0.1",
+    "aor-graphql-client-postgraphile": "../aor-graphql-client-postgraphile",
+    "aor-language-french": "~1.8.0",
+    "aor-rich-text-input": "1.0.2",
+    "apollo-client": "~1.9.3",
+    "apollo-test-utils": "~0.3.0",
+    "casual-browserify": "~1.5.12",
+    "date-fns": "~1.28.5",
+    "get-graphql-schema": "2.1.1",
+    "graphql": "~0.11.7",
+    "graphql-tag": "~2.4.2",
+    "graphql-tools": "~2.2.1",
+    "lodash.upperfirst": "~4.3.1",
+    "material-ui": "~0.19.3",
+    "pluralize": "~7.0.0",
+    "prop-types": "~15.6.0",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
+    "react-scripts": "1.1.5"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
