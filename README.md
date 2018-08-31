@@ -15,7 +15,11 @@ You'll find three packages in this repository:
 
 - [aor-graphql-client-graphcool](packages/aor-graphql-client-graphcool): *real* implementation tailored for graphcool *dialect* of graphql for admin-on-rest
 
+- [aor-graphql-client-postgraphile](packages/aor-graphql-client-postgraphile): *real* implementation tailored for postgraphile *dialect* of graphql for admin-on-rest
+
 - [admin-on-rest-graphql-demo](packages/admin-on-rest-graphql-demo): a graphcool version of the official admin-on-rest demo.
+
+- [admin-on-rest-postgraphile-demo](packages/admin-on-rest-postgraphile-demo): a postgraphile version of the official admin-on-rest demo.
 
 ## Roadmap
 
