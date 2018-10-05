@@ -6,7 +6,7 @@ import {
     CREATE as AOR_CREATE,
     UPDATE as AOR_UPDATE,
     DELETE as AOR_DELETE,
-} from 'admin-on-rest';
+} from 'react-admin';
 
 export const GET_LIST = AOR_GET_LIST;
 export const GET_ONE = AOR_GET_ONE;
